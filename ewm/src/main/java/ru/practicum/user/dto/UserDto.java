@@ -11,13 +11,13 @@ import java.io.Serializable;
 @Builder
 public class UserDto {
 
-    private final Integer id;
+    Integer id;
 
     @Size(max = 30)
     @NotNull
-    private final String email;
+    String email;
 
     @Size(max = 20)
     @NotNull
-    private final String name;
+    String name;
 }
