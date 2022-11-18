@@ -9,6 +9,7 @@ import ru.practicum.user.dto.UserDto;
 import ru.practicum.user.dto.UserShortDto;
 import ru.practicum.user.service.UserService;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
@@ -16,23 +17,24 @@ import java.util.List;
 @RestController
 @Slf4j
 @RequestMapping("/admin/users")
+@RequiredArgsConstructor
 public class UserController {
 
     @Autowired
     UserService userService;
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    UserDto create(UserShortDto usershortDto) {
+    @ResponseStatus(HttpStatus.OK)
+    UserDto create(@RequestBody @Valid UserDto userDto) {
         log.info("POST /admin/users");
-    return userService.create(usershortDto);
+    return userService.create(userDto);
     }
 
     @DeleteMapping(value = "/{userId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.OK)
     void delete(@PathVariable Integer userId) {
         log.info("DELETE /admin/users/id : {}", userId);
-        return userService.delete(userId);
+        userService.delete(userId);
     }
 
     @GetMapping

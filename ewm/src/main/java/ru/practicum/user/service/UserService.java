@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface UserService {
 
-    UserDto create(UserShortDto usershortDto);
+    UserDto create(UserDto userDto);
 
     void delete(Integer userId);
 
