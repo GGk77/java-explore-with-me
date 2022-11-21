@@ -45,5 +45,4 @@ public class UserController {
         return userService.getAll(userIds, from, size);
     }
 
-
 }

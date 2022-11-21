@@ -17,14 +17,14 @@ public class Compilation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "compilation_id", nullable = false)
-    private Integer id;
+    Integer id;
 
     @Size(max = 128)
     @NotNull
     @Column(name = "title", nullable = false, length = 128)
-    private String title;
+    String title;
 
     @Column(name = "pinned")
-    private Boolean pinned;
+    Boolean pinned;
 
 }
