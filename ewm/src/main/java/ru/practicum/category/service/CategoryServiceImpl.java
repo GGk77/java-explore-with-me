@@ -1,8 +1,10 @@
 package ru.practicum.category.service;
 
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -11,6 +13,7 @@ import ru.practicum.category.dto.CategoryDto;
 import ru.practicum.category.mapper.CategoryMapper;
 import ru.practicum.category.model.Category;
 import ru.practicum.category.repository.CategoryRepository;
+import ru.practicum.event.service.EventService;
 import ru.practicum.exception.NotFoundException;
 
 import java.util.List;
@@ -20,10 +23,15 @@ import java.util.stream.Collectors;
 @Slf4j
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
+@AllArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
 
     @Autowired
     CategoryRepository categoryRepository;
+
+    @Autowired
+    @Lazy
+    EventService eventService;
 
     @Transactional
     public CategoryDto create(CategoryDto categoryDto) {
@@ -46,17 +54,18 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Transactional
     public void delete(Integer categoryId) {
-        //todo надо ли проверять в эвентах, что категория используется, при удалении?
         log.debug("Delete category with id= {}, SERVICE", categoryId);
-        categoryRepository.delete(categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new NotFoundException("User with id =" + categoryId + " not found")));
+        if (!eventService.existsByCategoryId(categoryId)) {
+            categoryRepository.delete(categoryRepository.findById(categoryId)
+                    .orElseThrow(() -> new NotFoundException("category with id =" + categoryId + " not found")));
+        }
     }
 
     @Override
     public CategoryDto getCategoryById(Integer catId) {
         log.debug("Get category by id= {}, SERVICE", catId);
         return CategoryMapper.toCategoryDto(categoryRepository.findById(catId)
-                .orElseThrow(() -> new NotFoundException("User with id =" + catId + " not found")));
+                .orElseThrow(() -> new NotFoundException("category with id =" + catId + " not found")));
     }
 
     @Override

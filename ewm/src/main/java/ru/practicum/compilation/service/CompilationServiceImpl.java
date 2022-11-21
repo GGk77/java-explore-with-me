@@ -3,12 +3,21 @@ package ru.practicum.compilation.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.compilation.dto.CompilationDto;
+import ru.practicum.compilation.dto.NewCompilationDto;
+import ru.practicum.compilation.mapper.CompilationMapper;
+import ru.practicum.compilation.model.Compilation;
 import ru.practicum.compilation.repository.CompilationRepository;
+import ru.practicum.event.model.Event;
+import ru.practicum.event.service.EventService;
+import ru.practicum.exception.NotFoundException;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -22,43 +31,95 @@ public class CompilationServiceImpl implements CompilationService { //todo
     @Autowired
     EventService eventService;
 
-    @Override
-    public CompilationDto create(CompilationDto compilationDto) {
-        return null;
+    @Transactional
+    public CompilationDto create(NewCompilationDto compilationDto) {
+        log.debug("Create compilation, SERVICE");
+        List<Event> eventList = eventService.getEventsByIds(compilationDto.getEventsId());
+        Compilation compilation = compilationRepository.save(CompilationMapper.toCompilation(compilationDto, eventList));
+        log.debug("Compilation with id = {}, created", compilation.getId());
+        return CompilationMapper.toCompilationDto(compilation);
     }
 
-    @Override
+    @Transactional
     public void delete(Integer compId) {
-
+        log.debug("Delete category with id= {}, SERVICE", compId);
+        Compilation compilation = getEntityById(compId);
+        compilationRepository.delete(compilation);
+        log.debug("Compilation with id = {}, deleted", compilation.getId());
     }
 
-    @Override
+    @Transactional
     public void createPinInCompilation(Integer compId) {
-
+        log.debug("Create pin in compilation with id= {}, SERVICE", compId);
+        Compilation compilation = getEntityById(compId);
+        //todo check pinned?
+        compilation.setPinned(true);
+        compilationRepository.save(compilation);
+        log.debug("Compilation with id = {}, pinned", compId);
     }
 
-    @Override
-    public void deletePinInCompilation(Long compId) {
-
+    @Transactional
+    public void deletePinInCompilation(Integer compId) {
+        log.debug("Delete pin in compilation with id= {}, SERVICE", compId);
+        Compilation compilation = getEntityById(compId);
+        //todo check pinned?
+        compilation.setPinned(false);
+        compilationRepository.save(compilation);
+        log.debug("Compilation with id = {}, unpinned", compId);
     }
 
-    @Override
+    @Transactional
     public void createEventInCompilation(Integer compId, Integer eventId) {
-
+        log.debug("Create event with id= {} in compilation with id= {}, SERVICE", eventId, compId);
+        Event event = eventService.getEntityById(eventId);
+        Compilation compilation = getEntityById(compId);
+        List<Event> eventList = compilation.getEvents();
+        //todo check event in eventList?
+        eventList.add(event);
+        compilation.setEvents(eventList);
+        compilationRepository.save(compilation);
+        log.debug("In compilation with id= {}, created event with id= {}", compilation.getId(), event.getId());
     }
 
-    @Override
+    @Transactional
     public void deleteEventInCompilation(Integer compId, Integer eventId) {
-
+        log.debug("Delete event with id= {} in compilation with id= {}, SERVICE", eventId, compId);
+        Event event = eventService.getEntityById(eventId);
+        Compilation compilation = getEntityById(compId);
+        List<Event> eventList = compilation.getEvents();
+        //todo check event in eventList?
+        eventList.remove(event);
+        compilation.setEvents(eventList);
+        compilationRepository.save(compilation);
+        log.debug("In compilation with id= {}, deleted event with id= {}", compilation.getId(), event.getId());
     }
 
     @Override
     public CompilationDto getCompilationById(Integer compId) {
-        return null;
+        log.debug("Get compilation by id= {}, SERVICE", compId);
+        return CompilationMapper.toCompilationDto(compilationRepository.findById(compId)
+                .orElseThrow(() -> new NotFoundException("Compilation with id =" + compId + " not found")));
     }
 
     @Override
     public List<CompilationDto> getAllCompilationsWithParams(Boolean pinned, Integer from, Integer size) {
-        return null;
+        log.debug("Get all compilations, SERVICE");
+        Pageable pageable = PageRequest.of(from / size, size);
+        if (pinned) {
+            return compilationRepository.getByIdOrderByIdAsc(pinned, pageable)
+                    .stream()
+                    .map(CompilationMapper::toCompilationDto)
+                    .collect(Collectors.toList());
+        } else return compilationRepository.getByIdOrderByIdAsc(pinned, pageable) // todo подумать как передавать параметр boolean в repo
+                .stream()
+                .map(CompilationMapper::toCompilationDto)
+                .collect(Collectors.toList());
     }
+
+    @Override
+    public Compilation getEntityById(Integer compId) {
+        return compilationRepository.findById(compId)
+                .orElseThrow(() -> new NotFoundException("Compilation with id =" + compId + " not found"));
+    }
+
 }

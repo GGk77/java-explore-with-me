@@ -1,10 +1,13 @@
 package ru.practicum.compilation.model;
 
 import lombok.*;
+import ru.practicum.event.model.Event;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
 
 @Builder
 @AllArgsConstructor
@@ -26,5 +29,11 @@ public class Compilation {
 
     @Column(name = "pinned")
     Boolean pinned;
+
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @JoinTable(name = "events_compilations",
+            joinColumns = @JoinColumn(name = "compilation_id"),
+            inverseJoinColumns = @JoinColumn(name = "event_id"))
+    List<Event> events = new ArrayList<>();
 
 }

@@ -1,6 +1,7 @@
 package ru.practicum.event.model;
 
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import ru.practicum.category.model.Category;
@@ -17,31 +18,31 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
-@Table(name = "events")
+@Table(name = "events") //todo подумать над
 public class Event {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "event_id", nullable = false)
     Integer id;
 
-    @Size(max = 1000)
+    @Size(min = 20, max = 1000)
     @NotNull
-    @Column(name = "annotation", nullable = false, length = 1000)
+    @Column(name = "annotation", nullable = false)
     String annotation;
 
-    @Size(max = 500)
+    @Size(min = 3, max = 500)
     @NotNull
-    @Column(name = "title", nullable = false, length = 500)
+    @Column(name = "title", nullable = false)
     String title;
 
-    @Size(max = 5000)
-    @NotNull
+    @Size(min = 20, max = 5000)
     @Column(name = "description", nullable = false, length = 5000)
     String description;
 
-    @Size(max = 500)
     @NotNull
-    @Column(name = "state", nullable = false, length = 500)
+    @Column(name = "state", nullable = false)
+    @Enumerated(EnumType.STRING)
     String state;
 
     @Column(name = "created")
@@ -55,9 +56,8 @@ public class Event {
     LocalDateTime startDate;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "initiator_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "initiator_id", referencedColumnName = "user_id")
     User initiator;
 
     @Column(name = "lat")
@@ -83,7 +83,4 @@ public class Event {
 
     @Transient
     Integer views;
-
-
-
 }

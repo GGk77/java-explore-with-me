@@ -6,4 +6,5 @@ import ru.practicum.compilation.model.Compilation;
 
 @Repository
 public interface CompilationRepository extends JpaRepository<Compilation, Integer> {
+    //todo many methods or QueryPredicateExecutor<Compilation???>
 }

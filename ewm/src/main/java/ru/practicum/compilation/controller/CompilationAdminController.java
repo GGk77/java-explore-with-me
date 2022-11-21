@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.category.dto.CategoryDto;
 import ru.practicum.compilation.dto.CompilationDto;
+import ru.practicum.compilation.dto.NewCompilationDto;
 import ru.practicum.compilation.service.CompilationService;
 
 import javax.validation.Valid;
@@ -24,7 +25,7 @@ public class CompilationAdminController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    public CompilationDto create(@RequestBody @Valid CompilationDto compilationDto) {
+    public CompilationDto create(@RequestBody @Valid NewCompilationDto compilationDto) {
         log.info("POST /admin/compilations: {}", compilationDto);
         return compilationService.create(compilationDto);
     }
@@ -45,7 +46,7 @@ public class CompilationAdminController {
 
     @DeleteMapping("/{compId}/pin")
     @ResponseStatus(HttpStatus.OK)
-    public void deletePinInCompilation(@PathVariable Long compId) {
+    public void deletePinInCompilation(@PathVariable Integer compId) {
         log.info("DELETE /compId/pin: {}", compId);
         compilationService.deletePinInCompilation(compId);
     }
