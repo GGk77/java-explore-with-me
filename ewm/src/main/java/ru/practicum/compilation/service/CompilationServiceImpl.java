@@ -23,8 +23,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class CompilationServiceImpl implements CompilationService { //todo
-
+public class CompilationServiceImpl implements CompilationService {
     @Autowired
     CompilationRepository compilationRepository;
 
@@ -105,12 +104,12 @@ public class CompilationServiceImpl implements CompilationService { //todo
     public List<CompilationDto> getAllCompilationsWithParams(Boolean pinned, Integer from, Integer size) {
         log.debug("Get all compilations, SERVICE");
         Pageable pageable = PageRequest.of(from / size, size);
-        if (pinned) {
-            return compilationRepository.getByIdOrderByIdAsc(pinned, pageable)
+        if (pinned == null) {
+            return compilationRepository.findAll(pageable)
                     .stream()
                     .map(CompilationMapper::toCompilationDto)
                     .collect(Collectors.toList());
-        } else return compilationRepository.getByIdOrderByIdAsc(pinned, pageable) // todo подумать как передавать параметр boolean в repo
+        } else return compilationRepository.getByPinnedOrderByPinnedAsc(pinned, pageable)
                 .stream()
                 .map(CompilationMapper::toCompilationDto)
                 .collect(Collectors.toList());
