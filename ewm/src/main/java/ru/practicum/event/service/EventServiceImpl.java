@@ -2,9 +2,13 @@ package ru.practicum.event.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.event.dto.*;
+import ru.practicum.event.model.Event;
+import ru.practicum.event.repository.EventRepository;
+import ru.practicum.exception.NotFoundException;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +19,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class EventServiceImpl implements EventService {
 
+    @Autowired
+    EventRepository eventRepository;
 
     @Override
     public EventDto create(NewEventDto newEventDto, Integer userId) {
@@ -72,7 +78,8 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public Boolean existsByCategoryId(Integer categoryId) {
-        return null;
+    public Event getEntityById(Integer id) {
+        return eventRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("event with id =" + id + " not found"));
     }
 }

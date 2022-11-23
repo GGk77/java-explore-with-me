@@ -34,7 +34,7 @@ public class Request {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "user_id")
-    User user;
+    User requestor;
 
 
     @Builder.Default

@@ -31,8 +31,8 @@ CREATE TABLE IF NOT EXISTS "events"
     published         TIMESTAMP,
     start_date        TIMESTAMP          NOT NULL,
     initiator_id      INTEGER            NOT NULL,
-    lat               NUMERIC(8, 5)      NOT NULL,
-    lon               NUMERIC(8, 5)      NOT NULL,
+    lat               NUMERIC(10, 10)    NOT NULL,
+    lon               NUMERIC(10, 10)    NOT NULL,
     category_id       BIGINT             NOT NULL,
     paid              BOOLEAN                     DEFAULT FALSE,
     moderation        BOOLEAN                     DEFAULT FALSE,
@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS "requests"
     request_id SERIAL PRIMARY KEY NOT NULL,
     event_id   INTEGER            NOT NULL,
     user_id    INTEGER            NOT NULL,
-    status     VARCHAR(32)        NOT NULL,
+    status     VARCHAR(20)        NOT NULL,
     created    TIMESTAMP DEFAULT NOW(),
     CONSTRAINT fk_event_request FOREIGN KEY (event_id) REFERENCES events (event_id) ON DELETE CASCADE,
     CONSTRAINT fk_user_request FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE
@@ -55,8 +55,19 @@ CREATE TABLE IF NOT EXISTS "requests"
 CREATE TABLE IF NOT EXISTS "events_compilations"
 (
     event_compilation_id SERIAL PRIMARY KEY NOT NULL,
-    event_id              INTEGER            NOT NULL,
+    event_id             INTEGER            NOT NULL,
     compilation_id       INTEGER            NOT NULL,
     CONSTRAINT fk_compilation_event FOREIGN KEY (event_id) REFERENCES events (event_id) ON DELETE CASCADE,
     CONSTRAINT fk_event_compilation FOREIGN KEY (compilation_id) REFERENCES compilations (compilation_id) ON DELETE SET NULL
+);
+
+CREATE TABLE IF NOT EXISTS "participants"
+(
+    request_id SERIAL PRIMARY KEY NOT NULL,
+    event_id   INTEGER            NOT NULL,
+    user_id    INTEGER            NOT NULL,
+    status     VARCHAR(20)        NOT NULL,
+    created    TIMESTAMP DEFAULT NOW(),
+    CONSTRAINT fk_event_request FOREIGN KEY (event_id) REFERENCES events (event_id) ON DELETE CASCADE,
+    CONSTRAINT fk_user_request FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE
 );

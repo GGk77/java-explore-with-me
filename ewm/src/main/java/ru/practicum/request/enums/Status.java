@@ -5,7 +5,7 @@ import java.util.Optional;
 public enum Status {
 
     PENDING,
-    PUBLISHED,
+    CONFIRMED,
     REJECTED,
     CANCELED;
 

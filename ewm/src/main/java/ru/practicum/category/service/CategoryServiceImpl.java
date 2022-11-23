@@ -55,7 +55,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional
     public void delete(Integer categoryId) {
         log.debug("Delete category with id= {}, SERVICE", categoryId);
-        if (!eventService.existsByCategoryId(categoryId)) {
+        if (!categoryRepository.existsEventByCategoryId(categoryId)) {
             categoryRepository.delete(categoryRepository.findById(categoryId)
                     .orElseThrow(() -> new NotFoundException("category with id =" + categoryId + " not found")));
         }

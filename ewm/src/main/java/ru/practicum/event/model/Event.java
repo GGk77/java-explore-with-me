@@ -4,6 +4,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.annotations.WhereJoinTable;
 import ru.practicum.category.model.Category;
 import ru.practicum.user.model.User;
 
@@ -11,6 +12,8 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Builder
 @AllArgsConstructor
@@ -80,6 +83,13 @@ public class Event {
     @NotNull
     @Column(name = "participant_limit", nullable = false)
     Integer participantLimit;
+
+    @WhereJoinTable(clause = "status='CONFIRMED'")
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @JoinTable(name = "participants",
+            joinColumns = @JoinColumn(name = "event_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    List<User> participants = new ArrayList<>();
 
     @Transient
     Integer views;

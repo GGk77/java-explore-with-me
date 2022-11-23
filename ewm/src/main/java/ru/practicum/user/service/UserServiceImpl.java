@@ -54,4 +54,8 @@ public class UserServiceImpl implements UserService {
                 .map(UserMapper::toUserDto)
                 .collect(Collectors.toList());
     }
+
+    public User getEntityById(Integer id) {
+        return  userRepository.findById(id).orElseThrow(() -> new NotFoundException("user with id =" + id + " not found"));
+    }
 }

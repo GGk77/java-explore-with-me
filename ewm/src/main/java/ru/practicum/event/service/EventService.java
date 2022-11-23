@@ -1,6 +1,7 @@
 package ru.practicum.event.service;
 
 import ru.practicum.event.dto.*;
+import ru.practicum.event.model.Event;
 
 import java.util.List;
 import java.util.Optional;
@@ -42,6 +43,6 @@ public interface EventService {
                                      Integer from,
                                      Integer size);
 
-    Boolean existsByCategoryId(Integer categoryId);
+    Event getEntityById(Integer id);
 
 }
