@@ -14,7 +14,7 @@ import ru.practicum.compilation.model.Compilation;
 import ru.practicum.compilation.repository.CompilationRepository;
 import ru.practicum.event.model.Event;
 import ru.practicum.event.service.EventService;
-import ru.practicum.exception.NotFoundException;
+import ru.practicum.error.exception.NotFoundException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,7 +33,7 @@ public class CompilationServiceImpl implements CompilationService {
     @Transactional
     public CompilationDto create(NewCompilationDto compilationDto) {
         log.debug("Create compilation, SERVICE");
-        List<Event> eventList = eventService.getEventsByIds(compilationDto.getEventsId());
+        List<Event> eventList = eventService.getAllEventsByIds(compilationDto.getEventsId());
         Compilation compilation = compilationRepository.save(CompilationMapper.toCompilation(compilationDto, eventList));
         log.debug("Compilation with id = {}, created", compilation.getId());
         return CompilationMapper.toCompilationDto(compilation);

@@ -10,15 +10,13 @@ import java.util.List;
 
 @Repository
 public interface RequestRepository extends JpaRepository<Request, Integer> {
-    List<Request> getByIdOrderByStatus(Integer id, Status status);
+    boolean existsByEvent_IdAndEvent_Initiator_Id(Integer eventId, Integer userId);
+
+    List<Request> getByEvent_IdAndStatus(Integer id, Status status);
 
     List<Request> getByEvent_Initiator_IdAndEvent_Id(Integer userId, Integer eventId);
 
-
-
     List<Request> getByIdOrderById(Integer id);
-
-
 
 
 }

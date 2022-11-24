@@ -20,9 +20,7 @@ public class Category {
     @Column(name = "category_id", nullable = false)
     Integer id;
 
-    @Size(max = 30)
-    @NotNull
-    @Column(name = "name", nullable = false, length = 30)
+    @Column(name = "name", nullable = false)
     String name;
 
 }

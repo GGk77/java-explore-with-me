@@ -1,22 +1,23 @@
 CREATE TABLE IF NOT EXISTS "users"
 (
     user_id SERIAL PRIMARY KEY NOT NULL,
-    email   varchar(30)        NOT NULL,
-    name    varchar(20)        NOT NULL,
-    CONSTRAINT UQ_USER_EMAIL UNIQUE (email)
+    email   varchar(100)        NOT NULL,
+    name    varchar(100)        NOT NULL,
+    CONSTRAINT UQ_USER_EMAIL UNIQUE (email),
+    CONSTRAINT UQ_USER_NAME UNIQUE (name)
 );
 
 CREATE TABLE IF NOT EXISTS "categories"
 (
     category_id SERIAL PRIMARY KEY NOT NULL,
-    name        VARCHAR(30)        NOT NULL,
+    name        VARCHAR(100)        NOT NULL,
     CONSTRAINT UQ_CATEGORY_NAME UNIQUE (name)
 );
 
 CREATE TABLE IF NOT EXISTS "compilations"
 (
     compilation_id SERIAL PRIMARY KEY NOT NULL,
-    title          VARCHAR(128)       NOT NULL,
+    title          VARCHAR(500)       NOT NULL,
     pinned         BOOLEAN DEFAULT FALSE
 );
 
@@ -46,7 +47,7 @@ CREATE TABLE IF NOT EXISTS "requests"
     request_id SERIAL PRIMARY KEY NOT NULL,
     event_id   INTEGER            NOT NULL,
     user_id    INTEGER            NOT NULL,
-    status     VARCHAR(20)        NOT NULL,
+    status     VARCHAR(100)        NOT NULL,
     created    TIMESTAMP DEFAULT NOW(),
     CONSTRAINT fk_event_request FOREIGN KEY (event_id) REFERENCES events (event_id) ON DELETE CASCADE,
     CONSTRAINT fk_user_request FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE
@@ -66,7 +67,7 @@ CREATE TABLE IF NOT EXISTS "participants"
     request_id SERIAL PRIMARY KEY NOT NULL,
     event_id   INTEGER            NOT NULL,
     user_id    INTEGER            NOT NULL,
-    status     VARCHAR(20)        NOT NULL,
+    status     VARCHAR(100)        NOT NULL,
     created    TIMESTAMP DEFAULT NOW(),
     CONSTRAINT fk_event_request FOREIGN KEY (event_id) REFERENCES events (event_id) ON DELETE CASCADE,
     CONSTRAINT fk_user_request FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE

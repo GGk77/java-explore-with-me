@@ -16,8 +16,6 @@ public class CompilationDto {
 
     List<EventShortDto> events;
 
-    @Size(max = 128)
-    @NotNull
     String title;
 
     Boolean pinned;

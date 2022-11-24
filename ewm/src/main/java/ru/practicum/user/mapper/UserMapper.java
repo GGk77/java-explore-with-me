@@ -2,6 +2,7 @@ package ru.practicum.user.mapper;
 
 import org.springframework.stereotype.Component;
 import ru.practicum.user.dto.UserDto;
+import ru.practicum.user.dto.UserShortDto;
 import ru.practicum.user.model.User;
 
 @Component
@@ -19,6 +20,13 @@ public class UserMapper {
                 .id(userDto.getId())
                 .name(userDto.getName())
                 .email(userDto.getEmail())
+                .build();
+    }
+
+    public static UserShortDto toUserShortDto(User user) {
+        return UserShortDto.builder()
+                .name(user.getName())
+                .email(user.getEmail())
                 .build();
     }
 }

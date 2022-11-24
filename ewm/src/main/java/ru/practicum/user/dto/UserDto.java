@@ -13,11 +13,9 @@ public class UserDto {
 
     Integer id;
 
-    @Size(max = 30)
     @NotNull
     String email;
 
-    @Size(max = 20)
     @NotNull
     String name;
 }

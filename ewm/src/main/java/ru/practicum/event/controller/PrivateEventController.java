@@ -52,7 +52,7 @@ public class PrivateEventController {
     @ResponseStatus(HttpStatus.OK)
     public EventDto getEventById(@PathVariable Integer userId, @PathVariable Integer eventId) {
         log.info("GET /users/userId/events/eventId = {}, userId = {}", eventId, userId);
-        return eventService.getEventById(userId, eventId);
+        return eventService.getEventByUserId(userId, eventId);
     }
 
     @PatchMapping("/{eventId}")

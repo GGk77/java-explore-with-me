@@ -14,7 +14,7 @@ public interface EventService {
 
     List<EventShortDto> getAllEventsUserById(Integer userId, Integer from, Integer size);
 
-    EventDto getEventById(Integer userId, Integer eventId);
+    EventDto getEventByUserId(Integer userId, Integer eventId);
 
     EventDto cancelEventById(Integer userId, Integer eventId);
 
@@ -44,5 +44,7 @@ public interface EventService {
                                      Integer size);
 
     Event getEntityById(Integer id);
+
+    List<Event> getAllEventsByIds(List<Integer> ids);
 
 }

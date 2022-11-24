@@ -6,6 +6,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.WhereJoinTable;
 import ru.practicum.category.model.Category;
+import ru.practicum.event.enums.EventState;
 import ru.practicum.user.model.User;
 
 import javax.persistence.*;
@@ -46,7 +47,7 @@ public class Event {
     @NotNull
     @Column(name = "state", nullable = false)
     @Enumerated(EnumType.STRING)
-    String state;
+    EventState state = EventState.PENDING;
 
     @Column(name = "created")
     LocalDateTime created;

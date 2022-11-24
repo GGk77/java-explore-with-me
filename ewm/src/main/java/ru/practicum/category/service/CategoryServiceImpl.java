@@ -14,7 +14,7 @@ import ru.practicum.category.mapper.CategoryMapper;
 import ru.practicum.category.model.Category;
 import ru.practicum.category.repository.CategoryRepository;
 import ru.practicum.event.service.EventService;
-import ru.practicum.exception.NotFoundException;
+import ru.practicum.error.exception.NotFoundException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,10 +29,6 @@ public class CategoryServiceImpl implements CategoryService {
     @Autowired
     CategoryRepository categoryRepository;
 
-    @Autowired
-    @Lazy
-    EventService eventService;
-
     @Transactional
     public CategoryDto create(CategoryDto categoryDto) {
         log.debug("Create category, SERVICE");
@@ -44,8 +40,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional
     public CategoryDto update(CategoryDto categoryDto) {
         log.debug("Update category, SERVICE");
-        Category category = CategoryMapper.toCategory(
-                getCategoryById(categoryDto.getId()));
+        Category category = getEntityById(categoryDto.getId());
         category.setName(categoryDto.getName());
         categoryRepository.save(category);
         log.debug("Category with id= {}, updated", category.getId());
@@ -77,4 +72,11 @@ public class CategoryServiceImpl implements CategoryService {
                 .map(CategoryMapper::toCategoryDto)
                 .collect(Collectors.toList());
     }
+
+    private Category getEntityById(Integer id) {
+        log.debug("Get category by id= {}, SERVICE", id);
+        return categoryRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("category with id =" + id + " not found"));
+    }
+
 }

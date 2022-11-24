@@ -1,8 +1,13 @@
 package ru.practicum.event.dto;
 
+import lombok.Builder;
+import lombok.Data;
+
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
+@Data
+@Builder
 public class UpdateEventDto {
 
     @NotNull
