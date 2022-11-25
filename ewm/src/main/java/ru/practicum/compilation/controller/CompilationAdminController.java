@@ -25,13 +25,13 @@ public class CompilationAdminController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    public CompilationDto create(@RequestBody @Valid NewCompilationDto compilationDto) {
+    public CompilationDto create(@Valid @RequestBody NewCompilationDto compilationDto) {
         log.info("POST /admin/compilations: {}", compilationDto);
         return compilationService.create(compilationDto);
     }
 
     @DeleteMapping("/{compId}")
-    @ResponseStatus
+    @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable @NonNull Integer compId) {
         log.info("DELETE /admin/compilations/compId: {}", compId);
         compilationService.delete(compId);

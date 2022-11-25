@@ -23,7 +23,6 @@ import java.util.stream.Collectors;
 @Slf4j
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-@AllArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
 
     @Autowired

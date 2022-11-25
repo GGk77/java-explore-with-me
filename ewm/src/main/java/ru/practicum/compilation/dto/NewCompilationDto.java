@@ -1,13 +1,17 @@
 package ru.practicum.compilation.dto;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
+import lombok.extern.jackson.Jacksonized;
 
 import javax.validation.constraints.NotBlank;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
+@Jacksonized
 public class NewCompilationDto {
 
     List<Integer> eventsId;

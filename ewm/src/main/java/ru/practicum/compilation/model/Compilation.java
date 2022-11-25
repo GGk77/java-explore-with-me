@@ -22,7 +22,6 @@ public class Compilation {
     @Column(name = "compilation_id", nullable = false)
     Integer id;
 
-    @NotNull
     @Column(name = "title", nullable = false)
     String title;
 
