@@ -38,7 +38,7 @@ public class ErrorHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler
     public ApiError handleInternalServerErrorException(final Exception e) {
-        log.info(e.getLocalizedMessage());
+        log.trace("trace");
         return ApiError.builder()
                 .errors(Collections.singletonList(parse(e)))
                 .message(e.getMessage())

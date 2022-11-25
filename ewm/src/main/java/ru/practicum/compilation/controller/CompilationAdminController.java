@@ -25,7 +25,7 @@ public class CompilationAdminController {
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
     public CompilationDto create(@Valid @RequestBody NewCompilationDto newCompilationDto) {
-            log.info("POST /admin/compilations: {}", newCompilationDto);
+            log.info("POST /admin/compilations: {}", newCompilationDto.toString());
             return compilationService.create(newCompilationDto);
     }
 

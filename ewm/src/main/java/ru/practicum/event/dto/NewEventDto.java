@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.extern.jackson.Jacksonized;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -14,12 +16,17 @@ import java.time.LocalDateTime;
 @Jacksonized
 public class NewEventDto {
 
+    @Max(2000)
+    @Min(20)
     @NotBlank
     String annotation;
 
-    @NotBlank
+    @Max(120)
+    @Min(3)
     String title;
 
+    @Max(7000)
+    @Min(20)
     @NotBlank
     String description;
 
