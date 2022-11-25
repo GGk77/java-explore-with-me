@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.error.exception.BadRequestException;
+import ru.practicum.event.enums.EventState;
 import ru.practicum.request.mapper.RequestMapper;
 import ru.practicum.request.repository.RequestRepository;
 import ru.practicum.event.model.Event;
@@ -42,13 +43,13 @@ public class RequestServiceImpl implements RequestService {
         log.debug("Create request, SERVICE");
         Event event = eventService.getEntityById(eventId.orElseThrow(() -> new NotFoundException("event with id= " + eventId + " not found")));
         Request request = requestRepository.save(Request.builder()
-                .requestor(userService.getEntityById(userId))
+                .requester(userService.getEntityById(userId))
                 .status((event.getModeration()) ? Status.PENDING : Status.CONFIRMED)
                 .event(event)
                 .build());
-//        if (!event.getState().equals(EventState.PUBLISHED)) {
-//            throw new BadRequestException("event is not published");
-//        }
+        if (!event.getState().equals(EventState.PUBLISHED)) {
+            throw new BadRequestException("event is not published");
+        }
         if (event.getInitiator().getId().equals(userId)) {
             throw new BadRequestException("the initiator cannot make a request");
         }
@@ -108,7 +109,7 @@ public class RequestServiceImpl implements RequestService {
         User user = userService.getEntityById(userId);
         Request request = getEntityById(requestId);
         checkUpdates(userId, request.getEvent(), request);
-        if (!request.getRequestor().getId().equals(user.getId())) {
+        if (!request.getRequester().getId().equals(user.getId())) {
             throw new BadRequestException("cannot cancel another user's request");
         }
         requestRepository.save(request);

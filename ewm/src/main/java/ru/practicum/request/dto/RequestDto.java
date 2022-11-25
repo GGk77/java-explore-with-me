@@ -13,7 +13,7 @@ public class RequestDto {
 
     Integer eventId;
 
-    Integer requestorId;
+    Integer requester;
 
     Status status;
 

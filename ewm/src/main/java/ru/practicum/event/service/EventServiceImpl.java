@@ -48,7 +48,7 @@ public class EventServiceImpl implements EventService {
         Event event = EventMapper.toEvent(newEventDto);
         User user = userService.getEntityById(userId);
         event.setInitiator(user);
-        event.setCategory(CategoryMapper.toCategory(categoryService.getCategoryById(newEventDto.getCategory())));
+        event.setCategory(categoryService.getEntityById(newEventDto.getCategory()));
         eventRepository.save(event);
         log.debug("Event with id = {}, created", event.getId());
         return EventMapper.toEventDto(event);
@@ -112,7 +112,7 @@ public class EventServiceImpl implements EventService {
     public EventDto acceptEventById(Integer eventId) {
         Event event = getEntityById(eventId);
         event.setState(EventState.PUBLISHED);
-        event.setPublished(LocalDateTime.now());
+        event.setPublishedOn(LocalDateTime.now());
         eventRepository.save(event);
         return EventMapper.toEventDto(event);
     }

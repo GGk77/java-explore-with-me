@@ -1,5 +1,6 @@
 package ru.practicum.error;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Data;
 
@@ -10,6 +11,7 @@ import java.util.List;
 @Data
 @Builder
 public class ApiError {
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @Builder.Default
     List<String> errors = new ArrayList<>();
     String message;
@@ -17,6 +19,4 @@ public class ApiError {
     ErrorStatus status;
     @Builder.Default
     LocalDateTime timestamp = LocalDateTime.now();
-
-
 }

@@ -51,8 +51,8 @@ public class CategoryServiceImpl implements CategoryService {
     public void delete(Integer categoryId) {
         log.debug("Delete category with id= {}, SERVICE", categoryId);
         if (!categoryRepository.existsEventByCategoryId(categoryId)) {
-            categoryRepository.delete(categoryRepository.findById(categoryId)
-                    .orElseThrow(() -> new NotFoundException("category with id =" + categoryId + " not found")));
+            categoryRepository.deleteById(categoryId);
+            log.debug("Delete category with id= {}, SERVICE", categoryId);
         }
     }
 
@@ -73,7 +73,7 @@ public class CategoryServiceImpl implements CategoryService {
                 .collect(Collectors.toList());
     }
 
-    private Category getEntityById(Integer id) {
+    public Category getEntityById(Integer id) {
         log.debug("Get category by id= {}, SERVICE", id);
         return categoryRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("category with id =" + id + " not found"));

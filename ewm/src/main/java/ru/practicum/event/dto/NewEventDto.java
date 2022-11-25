@@ -1,7 +1,9 @@
 package ru.practicum.event.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Data;
+import lombok.extern.jackson.Jacksonized;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -10,22 +12,20 @@ import java.time.LocalDateTime;
 
 @Data
 @Builder
+@Jacksonized
 public class NewEventDto {
 
     @NotBlank
-    @Size(min = 20, max = 2000)
     String annotation;
 
     @NotBlank
-    @Size(min = 3, max = 120)
     String title;
 
     @NotBlank
-    @Size(min = 20, max = 7000)
     String description;
 
     @NotNull
-            //todo validation
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime eventDate;
 
     @NotNull

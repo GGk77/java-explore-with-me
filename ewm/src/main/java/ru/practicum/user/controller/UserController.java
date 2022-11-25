@@ -26,7 +26,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     UserDto create(@RequestBody @Valid UserDto userDto) {
         log.info("POST /admin/users: {}", userDto);
-    return userService.create(userDto);
+        return userService.create(userDto);
     }
 
     @DeleteMapping(value = "/{userId}")
@@ -38,7 +38,7 @@ public class UserController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    List<UserDto> getAll(@RequestParam(name = "ids",required = false) List<Integer> userIds,
+    List<UserDto> getAll(@RequestParam(name = "ids", required = false) List<Integer> userIds,
                          @PositiveOrZero @RequestParam(defaultValue = "0") Integer from,
                          @Positive @RequestParam(defaultValue = "10") Integer size) {
         log.info("GET all users");

@@ -14,6 +14,7 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "users")
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id", nullable = false)
@@ -21,7 +22,6 @@ public class User {
 
     @Column(name = "email", nullable = false, unique = true)
     String email;
-
 
     @Column(name = "name", nullable = false)
     String name;

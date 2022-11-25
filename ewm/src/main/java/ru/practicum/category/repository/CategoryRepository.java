@@ -8,6 +8,6 @@ import ru.practicum.category.model.Category;
 
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Integer> {
-    @Query(value = "select count (e.event_id) > 0 from events e where e.category_id = :id", nativeQuery = true)
+    @Query(value = "SELECT count(e.event_id) > 0 FROM events e WHERE e.category_id = :id", nativeQuery = true)
     boolean existsEventByCategoryId(@Param("id") Integer id);
 }

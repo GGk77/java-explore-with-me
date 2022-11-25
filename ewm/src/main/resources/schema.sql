@@ -1,8 +1,8 @@
 CREATE TABLE IF NOT EXISTS "users"
 (
     user_id SERIAL PRIMARY KEY NOT NULL,
-    email   varchar(100)        NOT NULL,
-    name    varchar(100)        NOT NULL,
+    email   varchar(100)       NOT NULL,
+    name    varchar(100)       NOT NULL,
     CONSTRAINT UQ_USER_EMAIL UNIQUE (email),
     CONSTRAINT UQ_USER_NAME UNIQUE (name)
 );
@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS "users"
 CREATE TABLE IF NOT EXISTS "categories"
 (
     category_id SERIAL PRIMARY KEY NOT NULL,
-    name        VARCHAR(100)        NOT NULL,
+    name        VARCHAR(100)       NOT NULL,
     CONSTRAINT UQ_CATEGORY_NAME UNIQUE (name)
 );
 
@@ -24,16 +24,16 @@ CREATE TABLE IF NOT EXISTS "compilations"
 CREATE TABLE IF NOT EXISTS "events"
 (
     event_id          SERIAL PRIMARY KEY NOT NULL,
-    annotation        VARCHAR(1000)      NOT NULL,
-    title             VARCHAR(500)       NOT NULL,
-    description       VARCHAR(5000)      NOT NULL,
+    annotation        VARCHAR(10000)      NOT NULL,
+    title             VARCHAR(5000)       NOT NULL,
+    description       VARCHAR(10000)      NOT NULL,
     state             VARCHAR(500)       NOT NULL,
     created           TIMESTAMP                   DEFAULT NOW(),
     published         TIMESTAMP,
     start_date        TIMESTAMP          NOT NULL,
     initiator_id      INTEGER            NOT NULL,
-    lat               NUMERIC(10, 10)    NOT NULL,
-    lon               NUMERIC(10, 10)    NOT NULL,
+    lat               NUMERIC(6, 2)      NOT NULL,
+    lon               NUMERIC(6, 2)      NOT NULL,
     category_id       BIGINT             NOT NULL,
     paid              BOOLEAN                     DEFAULT FALSE,
     moderation        BOOLEAN                     DEFAULT FALSE,
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS "requests"
     request_id SERIAL PRIMARY KEY NOT NULL,
     event_id   INTEGER            NOT NULL,
     user_id    INTEGER            NOT NULL,
-    status     VARCHAR(100)        NOT NULL,
+    status     VARCHAR(100)       NOT NULL,
     created    TIMESTAMP DEFAULT NOW(),
     CONSTRAINT fk_event_request FOREIGN KEY (event_id) REFERENCES events (event_id) ON DELETE CASCADE,
     CONSTRAINT fk_user_request FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE
@@ -67,7 +67,7 @@ CREATE TABLE IF NOT EXISTS "participants"
     request_id SERIAL PRIMARY KEY NOT NULL,
     event_id   INTEGER            NOT NULL,
     user_id    INTEGER            NOT NULL,
-    status     VARCHAR(100)        NOT NULL,
+    status     VARCHAR(100)       NOT NULL,
     created    TIMESTAMP DEFAULT NOW(),
     CONSTRAINT fk_event_request FOREIGN KEY (event_id) REFERENCES events (event_id) ON DELETE CASCADE,
     CONSTRAINT fk_user_request FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE

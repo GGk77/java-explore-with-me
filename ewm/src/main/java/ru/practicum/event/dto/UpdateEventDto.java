@@ -1,13 +1,16 @@
 package ru.practicum.event.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Data;
+import lombok.extern.jackson.Jacksonized;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Data
 @Builder
+@Jacksonized
 public class UpdateEventDto {
 
     @NotNull
@@ -19,7 +22,7 @@ public class UpdateEventDto {
 
     String description;
 
-    // todo validations?
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime eventDate;
 
     Integer category;

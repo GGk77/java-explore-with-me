@@ -30,36 +30,31 @@ public class Event {
     @Column(name = "event_id", nullable = false)
     Integer id;
 
-    @Size(min = 20, max = 1000)
-    @NotNull
     @Column(name = "annotation", nullable = false)
     String annotation;
 
-    @Size(min = 3, max = 500)
-    @NotNull
     @Column(name = "title", nullable = false)
     String title;
 
-    @Size(min = 20, max = 5000)
-    @Column(name = "description", nullable = false, length = 5000)
+
+    @Column(name = "description", nullable = false)
     String description;
 
-    @NotNull
+    @Builder.Default
     @Column(name = "state", nullable = false)
     @Enumerated(EnumType.STRING)
     EventState state = EventState.PENDING;
 
+    @CreationTimestamp
     @Column(name = "created")
-    LocalDateTime created;
+    LocalDateTime createdOn;
 
     @Column(name = "published")
-    LocalDateTime  published;
+    LocalDateTime  publishedOn;
 
-    @NotNull
-    @Column(name = "start_date", nullable = false)
+    @Column(name = "start_date")
     LocalDateTime startDate;
 
-    @NotNull
     @ManyToOne
     @JoinColumn(name = "initiator_id", referencedColumnName = "user_id")
     User initiator;
@@ -70,9 +65,8 @@ public class Event {
     @Column(name = "lon")
     Double lon;
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "category_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "category_id")
     Category category;
 
     @Column(name = "paid")
@@ -81,8 +75,7 @@ public class Event {
     @Column(name = "moderation")
     Boolean moderation;
 
-    @NotNull
-    @Column(name = "participant_limit", nullable = false)
+    @Column(name = "participant_limit")
     Integer participantLimit;
 
     @WhereJoinTable(clause = "status='CONFIRMED'")
