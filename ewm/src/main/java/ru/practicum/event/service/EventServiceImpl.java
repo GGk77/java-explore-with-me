@@ -7,16 +7,15 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.category.mapper.CategoryMapper;
 import ru.practicum.category.service.CategoryService;
 import ru.practicum.error.exception.BadRequestException;
+import ru.practicum.error.exception.NotFoundException;
 import ru.practicum.error.exception.ValidationException;
 import ru.practicum.event.dto.*;
 import ru.practicum.event.enums.EventState;
 import ru.practicum.event.mapper.EventMapper;
 import ru.practicum.event.model.Event;
 import ru.practicum.event.repository.EventRepository;
-import ru.practicum.error.exception.NotFoundException;
 import ru.practicum.user.model.User;
 import ru.practicum.user.service.UserService;
 

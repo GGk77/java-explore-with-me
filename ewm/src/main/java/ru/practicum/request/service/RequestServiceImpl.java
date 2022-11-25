@@ -1,21 +1,20 @@
 package ru.practicum.request.service;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.error.exception.BadRequestException;
+import ru.practicum.error.exception.NotFoundException;
 import ru.practicum.event.enums.EventState;
-import ru.practicum.request.mapper.RequestMapper;
-import ru.practicum.request.repository.RequestRepository;
 import ru.practicum.event.model.Event;
 import ru.practicum.event.service.EventService;
-import ru.practicum.error.exception.NotFoundException;
 import ru.practicum.request.dto.RequestDto;
 import ru.practicum.request.enums.Status;
+import ru.practicum.request.mapper.RequestMapper;
 import ru.practicum.request.model.Request;
+import ru.practicum.request.repository.RequestRepository;
 import ru.practicum.user.model.User;
 import ru.practicum.user.service.UserService;
 

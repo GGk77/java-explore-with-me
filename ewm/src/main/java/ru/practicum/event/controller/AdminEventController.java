@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.event.dto.AdminUpdateDto;
 import ru.practicum.event.dto.EventDto;
-import ru.practicum.event.model.Event;
 import ru.practicum.event.service.EventService;
 
 import javax.validation.constraints.Positive;
