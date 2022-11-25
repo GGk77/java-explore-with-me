@@ -48,7 +48,7 @@ public class RequestController {
         return requestService.getAllRequestsByInitiatorId(userId, eventId);
     }
 
-    @GetMapping("/requests/{requestId}/cancel")
+    @PatchMapping("/requests/{requestId}/cancel")
     @ResponseStatus(HttpStatus.OK)
     public RequestDto cancelRequest(@PathVariable Integer userId, @PathVariable Integer requestId) {
         log.info("GET /requests/requestId = {}/cancel  | userId = {}", requestId, userId);

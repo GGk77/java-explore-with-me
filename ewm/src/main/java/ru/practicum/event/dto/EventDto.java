@@ -33,7 +33,6 @@ public class EventDto {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime publishedOn;
 
-
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime eventDate;
 
@@ -50,6 +49,4 @@ public class EventDto {
     Boolean requestModeration;
 
     Integer participantLimit;
-
-    Integer views;
 }

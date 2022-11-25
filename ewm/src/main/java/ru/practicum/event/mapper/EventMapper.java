@@ -19,7 +19,7 @@ public class EventMapper {
         return Event.builder()
                 .annotation(eventDto.getAnnotation())
                 .description(eventDto.getDescription())
-                .startDate(eventDto.getEventDate())
+                .eventDate(eventDto.getEventDate())
                 .paid(eventDto.getPaid())
                 .participantLimit(eventDto.getParticipantLimit())
                 .moderation(eventDto.getRequestModeration())
@@ -35,7 +35,7 @@ public class EventMapper {
                 .orElse(new ArrayList<>()).size();
         return EventDto.builder()
                 .id(event.getId())
-                .eventDate(event.getStartDate())
+                .eventDate(event.getEventDate())
                 .annotation(event.getAnnotation())
                 .description(event.getDescription())
                 .requestModeration(event.getModeration())
@@ -55,7 +55,7 @@ public class EventMapper {
                         .lon(event.getLon())
                         .build())
                 .initiator(UserMapper.toUserShortDto(event.getInitiator()))
-                .views(event.getViews())
+//                .views(event.getViews())
                 .build();
     }
 
@@ -64,7 +64,7 @@ public class EventMapper {
                 .orElse(new ArrayList<>()).size();
         return EventShortDto.builder()
                 .id(event.getId())
-                .eventDate(event.getStartDate())
+                .eventDate(event.getEventDate())
                 .annotation(event.getAnnotation())
                 .title(event.getTitle())
                 .paid(event.getPaid())
@@ -74,7 +74,7 @@ public class EventMapper {
                         .name(event.getCategory().getName())
                         .build())
                 .initiator(UserMapper.toUserShortDto(event.getInitiator()))
-                .views(event.getViews())
+//                .views(event.getViews())
                 .build();
     }
 

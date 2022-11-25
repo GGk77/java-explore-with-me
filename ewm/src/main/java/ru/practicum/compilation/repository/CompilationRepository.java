@@ -10,6 +10,4 @@ import java.util.List;
 @Repository
 public interface CompilationRepository extends JpaRepository<Compilation, Integer> {
     List<Compilation> getByPinnedOrderByPinnedAsc(Boolean pinned, Pageable pageable);
-    //todo method or QueryPredicateExecutor<Compilation???>
-
 }

@@ -9,8 +9,8 @@ import java.util.List;
 
 @Repository
 public interface EventRepository extends JpaRepository<Event, Integer> {
-    List<Event> getEventsByIdIn(List<Integer> ids);
+    List<Event> getByIdIn(List<Integer> ids);
 
-    List<Event> getByInitiator_IdOrderByStartDateDesc(Integer id, Pageable pageable);
+    List<Event> getByInitiator_IdOrderByEventDateDesc(Integer id, Pageable pageable);
 
 }

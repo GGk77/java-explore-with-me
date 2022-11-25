@@ -15,7 +15,7 @@ import javax.validation.Valid;
 
 @RestController
 @Slf4j
-@RequestMapping("/admin/compilations")
+@RequestMapping(value = "/admin/compilations")
 @RequiredArgsConstructor
 public class CompilationAdminController {
 
@@ -24,9 +24,9 @@ public class CompilationAdminController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    public CompilationDto create(@Valid @RequestBody NewCompilationDto compilationDto) {
-        log.info("POST /admin/compilations: {}", compilationDto);
-        return compilationService.create(compilationDto);
+    public CompilationDto create(@Valid @RequestBody NewCompilationDto newCompilationDto) {
+            log.info("POST /admin/compilations: {}", newCompilationDto);
+            return compilationService.create(newCompilationDto);
     }
 
     @DeleteMapping("/{compId}")

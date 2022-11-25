@@ -15,7 +15,7 @@ public interface RequestRepository extends JpaRepository<Request, Integer> {
 
     List<Request> getByEvent_Initiator_IdAndEvent_Id(Integer userId, Integer eventId);
 
-    List<Request> getByIdOrderById(Integer id);
+    List<Request> getByRequester_Id(Integer id);
 
 
 }

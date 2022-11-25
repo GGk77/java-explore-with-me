@@ -1,6 +1,5 @@
 package ru.practicum.compilation.service;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +12,9 @@ import ru.practicum.compilation.dto.NewCompilationDto;
 import ru.practicum.compilation.mapper.CompilationMapper;
 import ru.practicum.compilation.model.Compilation;
 import ru.practicum.compilation.repository.CompilationRepository;
+import ru.practicum.error.exception.NotFoundException;
 import ru.practicum.event.model.Event;
 import ru.practicum.event.service.EventService;
-import ru.practicum.error.exception.NotFoundException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,7 +23,6 @@ import java.util.stream.Collectors;
 @Slf4j
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-@AllArgsConstructor
 public class CompilationServiceImpl implements CompilationService {
     @Autowired
     CompilationRepository compilationRepository;
@@ -35,7 +33,7 @@ public class CompilationServiceImpl implements CompilationService {
     @Transactional
     public CompilationDto create(NewCompilationDto compilationDto) {
         log.debug("Create compilation, SERVICE");
-        List<Event> eventList = eventService.getAllEventsByIds(compilationDto.getEventsId());
+        List<Event> eventList = eventService.getAllEventsByIds(compilationDto.getEvents());
         Compilation compilation = compilationRepository.save(CompilationMapper.toCompilation(compilationDto, eventList));
         log.debug("Compilation with id = {}, created", compilation.getId());
         return CompilationMapper.toCompilationDto(compilation);

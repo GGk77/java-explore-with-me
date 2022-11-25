@@ -30,6 +30,4 @@ public class EventShortDto {
     Integer confirmedRequests;
 
     Boolean paid;
-
-    Integer views;
 }

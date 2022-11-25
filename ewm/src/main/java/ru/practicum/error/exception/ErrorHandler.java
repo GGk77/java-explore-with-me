@@ -10,9 +10,20 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.practicum.error.ApiError;
 import ru.practicum.error.ErrorStatus;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.Collections;
+
 @RestControllerAdvice
 @Slf4j
 public class ErrorHandler {
+
+    public static String parse(Throwable exception) {
+        StringWriter writer = new StringWriter();
+        PrintWriter printer = new PrintWriter(writer);
+        exception.printStackTrace(printer);
+        return writer.toString();
+    }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler
@@ -26,13 +37,16 @@ public class ErrorHandler {
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler
-    public ApiError handleInternalServerErrorException(final RuntimeException e) {
+    public ApiError handleInternalServerErrorException(final Exception e) {
+        log.info(e.getLocalizedMessage());
         return ApiError.builder()
+                .errors(Collections.singletonList(parse(e)))
                 .message(e.getMessage())
                 .status(ErrorStatus.INTERNAL_SERVER_ERROR)
                 .reason("INTERNAL_SERVER_ERROR")
                 .build();
     }
+
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler

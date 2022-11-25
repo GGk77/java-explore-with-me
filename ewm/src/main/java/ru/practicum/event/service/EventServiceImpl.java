@@ -74,7 +74,7 @@ public class EventServiceImpl implements EventService {
         log.debug("Get all event by user id= {}  | SERVICE", userId);
         Pageable pageable = PageRequest.of(from / size, size);
         userService.getEntityById(userId);
-        List<Event> eventList = eventRepository.getByInitiator_IdOrderByStartDateDesc(userId, pageable);
+        List<Event> eventList = eventRepository.getByInitiator_IdOrderByEventDateDesc(userId, pageable);
         return EventMapper.toEventShortDto(eventList);
     }
 
@@ -143,6 +143,6 @@ public class EventServiceImpl implements EventService {
     @Override
     public List<Event> getAllEventsByIds(List<Integer> ids) {
         log.debug("Get events by ids, SERVICE");
-        return eventRepository.getEventsByIdIn(ids);
+        return eventRepository.getByIdIn(ids);
     }
 }

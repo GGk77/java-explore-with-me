@@ -11,7 +11,7 @@ public class RequestDto {
 
     Integer id;
 
-    Integer eventId;
+    Integer event;
 
     Integer requester;
 

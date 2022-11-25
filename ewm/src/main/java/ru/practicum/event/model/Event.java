@@ -18,7 +18,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "events") //todo подумать над
+@Table(name = "events")
 public class Event {
 
     @Id
@@ -49,7 +49,7 @@ public class Event {
     LocalDateTime  publishedOn;
 
     @Column(name = "start_date")
-    LocalDateTime startDate;
+    LocalDateTime eventDate;
 
     @ManyToOne
     @JoinColumn(name = "initiator_id", referencedColumnName = "user_id")
@@ -62,7 +62,7 @@ public class Event {
     Double lon;
 
     @ManyToOne
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "category_id", referencedColumnName = "category_id")
     Category category;
 
     @Column(name = "paid")
@@ -81,6 +81,6 @@ public class Event {
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     List<User> participants = new ArrayList<>();
 
-    @Transient
-    Integer views;
+//    @Transient
+//    Integer views;
 }

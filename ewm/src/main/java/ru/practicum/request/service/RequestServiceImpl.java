@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.error.exception.BadRequestException;
 import ru.practicum.error.exception.NotFoundException;
-import ru.practicum.event.enums.EventState;
 import ru.practicum.event.model.Event;
 import ru.practicum.event.service.EventService;
 import ru.practicum.request.dto.RequestDto;
@@ -41,14 +40,12 @@ public class RequestServiceImpl implements RequestService {
     public RequestDto create(Integer userId, Optional<Integer> eventId) {
         log.debug("Create request, SERVICE");
         Event event = eventService.getEntityById(eventId.orElseThrow(() -> new NotFoundException("event with id= " + eventId + " not found")));
-        Request request = requestRepository.save(Request.builder()
+        Request request = requestRepository.save(Request
+                .builder()
                 .requester(userService.getEntityById(userId))
                 .status((event.getModeration()) ? Status.PENDING : Status.CONFIRMED)
                 .event(event)
                 .build());
-        if (!event.getState().equals(EventState.PUBLISHED)) {
-            throw new BadRequestException("event is not published");
-        }
         if (event.getInitiator().getId().equals(userId)) {
             throw new BadRequestException("the initiator cannot make a request");
         }
@@ -59,7 +56,7 @@ public class RequestServiceImpl implements RequestService {
             throw new BadRequestException("request exist");
         }
         log.debug("request this id= {} create, SERVICE", request.getId());
-        return RequestMapper.toRequestDto(request); //todo
+        return RequestMapper.toRequestDto(request);
     }
 
     @Transactional
@@ -107,10 +104,10 @@ public class RequestServiceImpl implements RequestService {
         log.debug("Cancel request, SERVICE");
         User user = userService.getEntityById(userId);
         Request request = getEntityById(requestId);
-        checkUpdates(userId, request.getEvent(), request);
         if (!request.getRequester().getId().equals(user.getId())) {
             throw new BadRequestException("cannot cancel another user's request");
         }
+        request.setStatus(Status.CANCELED);
         requestRepository.save(request);
         log.debug("request cancel");
         return RequestMapper.toRequestDto(request);
@@ -119,7 +116,7 @@ public class RequestServiceImpl implements RequestService {
     @Override
     public List<RequestDto> getAllByParticipationId(Integer userId) {
         log.debug("Get all requests by id= {}, SERVICE", userId);
-        List<Request> requestList = requestRepository.getByIdOrderById(userId);
+        List<Request> requestList = requestRepository.getByRequester_Id(userId);
         return requestList.stream()
                 .map(RequestMapper::toRequestDto)
                 .collect(Collectors.toList());

@@ -1,20 +1,16 @@
 package ru.practicum.compilation.dto;
 
-import lombok.*;
+import lombok.Data;
 import lombok.extern.jackson.Jacksonized;
 
 import javax.validation.constraints.NotBlank;
 import java.util.List;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
+@Data
 @Jacksonized
 public class NewCompilationDto {
 
-    List<Integer> eventsId;
+    List<Integer> events;
 
     Boolean pinned;
 
