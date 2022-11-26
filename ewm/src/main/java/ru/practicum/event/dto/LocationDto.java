@@ -1,12 +1,14 @@
 package ru.practicum.event.dto;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.ToString;
 
 import javax.validation.constraints.NotNull;
 
-@Data
+@Getter
 @Builder
+@ToString
 public class LocationDto {
 
     @NotNull

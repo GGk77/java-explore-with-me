@@ -1,6 +1,5 @@
 package ru.practicum.compilation.controller;
 
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +23,7 @@ public class CompilationAdminController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    public CompilationDto create(@Valid @RequestBody NewCompilationDto newCompilationDto) {
+    public CompilationDto create(@RequestBody @Valid NewCompilationDto newCompilationDto) {
             log.info("POST /admin/compilations: {}", newCompilationDto.toString());
             return compilationService.create(newCompilationDto);
     }

@@ -76,11 +76,9 @@ public class Event {
 
     @WhereJoinTable(clause = "status='CONFIRMED'")
     @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-    @JoinTable(name = "participants",
+    @JoinTable(name = "requests",
             joinColumns = @JoinColumn(name = "event_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     List<User> participants = new ArrayList<>();
 
-//    @Transient
-//    Integer views;
 }

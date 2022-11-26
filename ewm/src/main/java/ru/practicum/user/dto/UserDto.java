@@ -1,10 +1,12 @@
 package ru.practicum.user.dto;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.ToString;
 
-@Data
+@Getter
 @Builder
+@ToString
 public class UserDto {
 
     Integer id;

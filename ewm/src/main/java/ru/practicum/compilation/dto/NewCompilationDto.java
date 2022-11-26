@@ -1,19 +1,26 @@
 package ru.practicum.compilation.dto;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.extern.jackson.Jacksonized;
 
 import javax.validation.constraints.NotBlank;
 import java.util.List;
 
-@Data
 @Jacksonized
+@Builder
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class NewCompilationDto {
-
-    List<Integer> events;
-
-    Boolean pinned;
 
     @NotBlank
     String title;
+
+    Boolean pinned;
+
+    List<Integer> events;
+
 }

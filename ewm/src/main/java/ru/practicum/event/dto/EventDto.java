@@ -1,9 +1,9 @@
 package ru.practicum.event.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.ToString;
 import lombok.extern.jackson.Jacksonized;
 import ru.practicum.category.dto.CategoryDto;
 import ru.practicum.event.enums.EventState;
@@ -11,9 +11,10 @@ import ru.practicum.user.dto.UserShortDto;
 
 import java.time.LocalDateTime;
 
-@Data
+@Getter
 @Builder
 @Jacksonized
+@ToString
 public class EventDto {
 
     Integer id;
@@ -26,14 +27,11 @@ public class EventDto {
 
     EventState state;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime createdOn;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime publishedOn;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime eventDate;
 
     UserShortDto initiator;

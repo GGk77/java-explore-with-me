@@ -27,6 +27,7 @@ import java.util.Optional;
 @Slf4j
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
+//todo
 public class EventServiceImpl implements EventService {
 
     @Autowired
@@ -66,7 +67,10 @@ public class EventServiceImpl implements EventService {
         if (!event.getState().equals(EventState.PENDING)) {
             throw new BadRequestException("this request is not in the pending state");
         }
-        return null; //todo
+        event.setState(EventState.PENDING);
+        return updateEvent(event, updateEventDto.getEventDate(), updateEventDto.getPaid(), updateEventDto.getDescription(),
+                updateEventDto.getParticipantLimit(), updateEventDto.getAnnotation(), updateEventDto.getTitle(),
+                updateEventDto.getCategory());
     }
 
     @Override
@@ -81,14 +85,14 @@ public class EventServiceImpl implements EventService {
     @Override
     public EventDto getEventByUserId(Integer userId, Integer eventId) {
         log.debug("Get event by user id= {}, event id= {}  | SERVICE", userId, eventId);
-        User user = userService.getEntityById(userId); //??
+        User user = userService.getEntityById(userId); // ?? todo нужен ли?
         Event event = getEntityById(eventId);
         return EventMapper.toEventDto(event);
     }
 
     @Transactional
     public EventDto cancelEventById(Integer userId, Integer eventId) {
-        User user = userService.getEntityById(userId); // ??
+        User user = userService.getEntityById(userId); // ?? todo нужен ли?
         Event event = getEntityById(eventId);
         event.setState(EventState.CANCELED);
         eventRepository.save(event);
@@ -105,6 +109,7 @@ public class EventServiceImpl implements EventService {
     @Override
     public List<EventShortDto> getAllEventsPublic(Optional<String> text, Optional<List<Integer>> categories, Optional<Boolean> paid, Optional<String> start, Optional<String> end, Optional<String> available, Optional<String> sort, Integer from, Integer size) {
         return null;
+        //todo
     }
 
     @Override
@@ -124,14 +129,23 @@ public class EventServiceImpl implements EventService {
         return EventMapper.toEventDto(event);
     }
 
-    @Override
+    @Transactional
     public EventDto updateAdmin(AdminUpdateDto adminUpdateDto, Integer eventId) {
-        return null;
+        Event event = getEntityById(eventId);
+        Optional.ofNullable(adminUpdateDto.getRequestModeration()).ifPresent(event::setModeration);
+        Optional.ofNullable(adminUpdateDto.getRequestModeration()).ifPresent(location -> {
+            event.setLat(adminUpdateDto.getLocation().getLat());
+            event.setLon(adminUpdateDto.getLocation().getLon());
+        });
+        return updateEvent(event, adminUpdateDto.getEventDate(), adminUpdateDto.getPaid(), adminUpdateDto.getDescription(),
+                adminUpdateDto.getParticipantLimit(), adminUpdateDto.getAnnotation(), adminUpdateDto.getTitle(),
+                adminUpdateDto.getCategory());
     }
 
     @Override
     public List<EventDto> getAllEventsAdmin(Optional<List<Integer>> users, Optional<List<String>> states, Optional<List<Integer>> categories, Optional<String> start, Optional<String> end, Integer from, Integer size) {
         return null;
+        //todo
     }
 
     @Override
@@ -144,5 +158,10 @@ public class EventServiceImpl implements EventService {
     public List<Event> getAllEventsByIds(List<Integer> ids) {
         log.debug("Get events by ids, SERVICE");
         return eventRepository.getByIdIn(ids);
+    }
+
+    private EventDto updateEvent(Event event, LocalDateTime eventDate, Boolean paid, String description,
+                                 Integer participantLimit, String annotation, String title, Integer category) {
+        //todo
     }
 }

@@ -1,15 +1,16 @@
 package ru.practicum.event.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.ToString;
 import lombok.extern.jackson.Jacksonized;
 
 import java.time.LocalDateTime;
 
-@Data
+@Getter
 @Builder
 @Jacksonized
+@ToString
 public class AdminUpdateDto {
 
     String annotation;
@@ -18,12 +19,11 @@ public class AdminUpdateDto {
 
     String description;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime eventDate;
 
     LocationDto location;
 
-    Long category;
+    Integer category;
 
     Boolean paid;
 

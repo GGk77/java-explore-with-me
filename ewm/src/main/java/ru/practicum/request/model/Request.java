@@ -1,14 +1,11 @@
 package ru.practicum.request.model;
 
 import lombok.*;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 import ru.practicum.event.model.Event;
 import ru.practicum.request.enums.Status;
 import ru.practicum.user.model.User;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Builder
@@ -24,21 +21,17 @@ public class Request {
     @Column(name = "request_id", nullable = false)
     Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "event_id")
+    @ManyToOne
+    @JoinColumn(name = "event_id", referencedColumnName = "event_id")
     Event event;
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "user_id")
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     User requester;
 
 
     @Builder.Default
     @Enumerated(EnumType.STRING)
-    @Setter
     @Column(name = "status")
     Status status = Status.PENDING;
 

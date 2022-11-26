@@ -1,15 +1,17 @@
 package ru.practicum.category.dto;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.ToString;
 import ru.practicum.utils.Create;
 import ru.practicum.utils.Update;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-@Data
+@Getter
 @Builder
+@ToString
 public class CategoryDto {
 
     @NotNull(groups = {Update.class})

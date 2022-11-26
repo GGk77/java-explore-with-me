@@ -5,8 +5,11 @@ import ru.practicum.request.enums.Status;
 
 import java.time.LocalDateTime;
 
-@Data
+@Getter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
 public class RequestDto {
 
     Integer id;
