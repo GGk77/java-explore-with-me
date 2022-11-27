@@ -3,6 +3,7 @@ package ru.practicum.error.exception;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -37,7 +38,7 @@ public class ErrorHandler {
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler
-    public ApiError handleInternalServerErrorException(final Exception e) {
+    public ApiError handleInternalServerErrorException(final RuntimeException e) {
         log.trace("trace");
         return ApiError.builder()
                 .errors(Collections.singletonList(parse(e)))
@@ -71,6 +72,16 @@ public class ErrorHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler
     public ApiError handleMethodArgumentNotValid(MethodArgumentNotValidException e) {
+        return ApiError.builder()
+                .status(ErrorStatus.BAD_REQUEST)
+                .message(e.getMessage())
+                .reason("BAD_REQUEST")
+                .build();
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler
+    public ApiError handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
         return ApiError.builder()
                 .status(ErrorStatus.BAD_REQUEST)
                 .message(e.getMessage())

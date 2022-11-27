@@ -1,6 +1,7 @@
 package ru.practicum.category.model;
 
 import lombok.*;
+import lombok.extern.jackson.Jacksonized;
 
 import javax.persistence.*;
 
@@ -11,6 +12,7 @@ import javax.persistence.*;
 @Setter
 @Entity
 @Table(name = "categories")
+@Jacksonized
 public class Category {
 
     @Id

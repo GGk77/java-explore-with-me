@@ -15,19 +15,14 @@ import java.time.LocalDateTime;
 @ToString
 public class NewEventDto {
 
-    @Max(2000)
-    @Min(20)
     @NotBlank
     @Size(min = 20, max = 2000)
     String annotation;
 
-    @Max(120)
-    @Min(3)
+    @NotBlank
     @Size(min = 3, max = 120)
     String title;
 
-    @Max(7000)
-    @Min(20)
     @NotBlank
     @Size(min = 20, max = 7000)
     String description;

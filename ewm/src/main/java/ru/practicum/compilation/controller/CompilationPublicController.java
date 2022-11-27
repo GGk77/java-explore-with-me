@@ -30,7 +30,7 @@ public class CompilationPublicController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<CompilationDto> getAllCompilationsWithParams(@RequestParam Boolean pinned,
+    public List<CompilationDto> getAllCompilationsWithParams(@RequestParam(required = false) Boolean pinned,
                                                              @PositiveOrZero @RequestParam(defaultValue = "0") Integer from,
                                                              @Positive @RequestParam(defaultValue = "10") Integer size) {
         log.info("GET all categories by params");

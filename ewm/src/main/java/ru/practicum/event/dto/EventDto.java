@@ -29,7 +29,6 @@ public class EventDto {
 
     LocalDateTime createdOn;
 
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     LocalDateTime publishedOn;
 
     LocalDateTime eventDate;
@@ -47,4 +46,6 @@ public class EventDto {
     Boolean requestModeration;
 
     Integer participantLimit;
+
+    Integer views;
 }

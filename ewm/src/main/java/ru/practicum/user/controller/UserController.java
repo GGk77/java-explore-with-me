@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.user.dto.UserDto;
+import ru.practicum.user.dto.UserShortDto;
 import ru.practicum.user.service.UserService;
 
 import javax.validation.Valid;
@@ -17,6 +19,7 @@ import java.util.List;
 @Slf4j
 @RequestMapping("/admin/users")
 @RequiredArgsConstructor
+@Validated
 public class UserController {
 
     @Autowired
@@ -24,7 +27,7 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    UserDto create(@RequestBody @Valid UserDto userDto) {
+    UserDto create(@Valid @RequestBody UserShortDto userDto) {
         log.info("POST /admin/users: {}", userDto);
         return userService.create(userDto);
     }

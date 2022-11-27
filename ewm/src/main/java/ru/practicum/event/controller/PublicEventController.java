@@ -33,16 +33,16 @@ public class PublicEventController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<EventShortDto> getAllEventsPublic(@RequestParam Optional<String> text,
-                                                  @RequestParam Optional<List<Integer>> categories,
-                                                  @RequestParam Optional<Boolean> paid,
-                                                  @RequestParam Optional<String> start,
-                                                  @RequestParam Optional<String> end,
-                                                  @RequestParam Optional<String> available,
-                                                  @RequestParam Optional<String> sort,
+    public List<EventShortDto> getAllEventsPublic(@RequestParam String text,
+                                                  @RequestParam List<Integer> categories,
+                                                  @RequestParam Boolean paid,
+                                                  @RequestParam(defaultValue = "null") String rangeStart,
+                                                  @RequestParam(defaultValue = "null") String rangeEnd,
+                                                  @RequestParam(defaultValue = "false") Boolean onlyAvailable,
+                                                  @RequestParam(defaultValue = "id") String sort,
                                                   @PositiveOrZero @RequestParam(defaultValue = "0") Integer from,
                                                   @Positive @RequestParam(defaultValue = "10") Integer size) {
         log.info("GET PUBLIC all event with params");
-        return eventService.getAllEventsPublic(text, categories, paid, start, end, available, sort, from, size);
+        return eventService.getAllEventsPublic(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size);
     }
 }

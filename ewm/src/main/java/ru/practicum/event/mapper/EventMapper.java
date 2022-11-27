@@ -1,5 +1,6 @@
 package ru.practicum.event.mapper;
 
+import org.springframework.data.domain.Page;
 import ru.practicum.category.dto.CategoryDto;
 import ru.practicum.event.dto.EventDto;
 import ru.practicum.event.dto.EventShortDto;
@@ -55,7 +56,7 @@ public class EventMapper {
                         .lon(event.getLon())
                         .build())
                 .initiator(UserMapper.toUserShortDto(event.getInitiator()))
-//                .views(event.getViews())
+                .views(event.getViews())
                 .build();
     }
 
@@ -74,11 +75,11 @@ public class EventMapper {
                         .name(event.getCategory().getName())
                         .build())
                 .initiator(UserMapper.toUserShortDto(event.getInitiator()))
-//                .views(event.getViews())
+                .views(event.getViews())
                 .build();
     }
 
-    public static List<EventDto> toEventDto(List<Event> event) {
+    public static List<EventDto> toEventDtoList(List<Event> event) {
         return event.stream().map(EventMapper::toEventDto).collect(Collectors.toList());
     }
 

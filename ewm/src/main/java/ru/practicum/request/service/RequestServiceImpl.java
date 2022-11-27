@@ -39,7 +39,7 @@ public class RequestServiceImpl implements RequestService {
     @Transactional
     public RequestDto create(Integer userId, Optional<Integer> eventId) {
         log.debug("Create request, SERVICE");
-        Event event = eventService.getEntityById(eventId.orElseThrow(() -> new NotFoundException("event with id= " + eventId + " not found")));
+        Event event = eventService.getEntityById(eventId.orElseThrow(() -> new BadRequestException("event with id= " + eventId + " not found")));
         Request request = requestRepository.save(Request
                 .builder()
                 .requester(userService.getEntityById(userId))

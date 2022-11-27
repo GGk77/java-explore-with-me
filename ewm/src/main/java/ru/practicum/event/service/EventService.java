@@ -1,6 +1,7 @@
 package ru.practicum.event.service;
 
 import ru.practicum.event.dto.*;
+import ru.practicum.event.enums.EventState;
 import ru.practicum.event.model.Event;
 
 import java.util.List;
@@ -20,14 +21,9 @@ public interface EventService {
 
     EventDto getEventByIdPublic(Integer eventId);
 
-    List<EventShortDto> getAllEventsPublic(Optional<String> text,
-                                           Optional<List<Integer>> categories,
-                                           Optional<Boolean> paid, Optional<String> start,
-                                           Optional<String> end,
-                                           Optional<String> available,
-                                           Optional<String> sort,
-                                           Integer from,
-                                           Integer size);
+    List<EventShortDto> getAllEventsPublic(String text, List<Integer> categories, Boolean paid,
+                                           String rangeStart, String rangeEnd, Boolean onlyAvailable,
+                                           String sort, Integer from, Integer size);
 
     EventDto acceptEventById(Integer eventId);
 
@@ -35,13 +31,8 @@ public interface EventService {
 
     EventDto updateAdmin(AdminUpdateDto adminUpdateDto, Integer eventId);
 
-    List<EventDto> getAllEventsAdmin(Optional<List<Integer>> users,
-                                     Optional<List<String>> states,
-                                     Optional<List<Integer>> categories,
-                                     Optional<String> start,
-                                     Optional<String> end,
-                                     Integer from,
-                                     Integer size);
+    List<EventDto> getAllEventsAdmin(List<Integer> users, List<EventState> states, List<Integer> categories,
+                                     String rangeStart, String rangeEnd, Integer from, Integer size);
 
     Event getEntityById(Integer id);
 

@@ -6,6 +6,7 @@ import lombok.ToString;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Getter
 @Builder
@@ -16,6 +17,6 @@ public class UserShortDto {
     @Email
     String email;
 
-    @NotBlank
+    @NotNull
     String name;
 }

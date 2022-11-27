@@ -32,7 +32,6 @@ public class Event {
     @Column(name = "title", nullable = false)
     String title;
 
-
     @Column(name = "description", nullable = false)
     String description;
 
@@ -81,4 +80,6 @@ public class Event {
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     List<User> participants = new ArrayList<>();
 
+    @Transient
+    Integer views;
 }

@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.event.dto.AdminUpdateDto;
 import ru.practicum.event.dto.EventDto;
+import ru.practicum.event.enums.EventState;
 import ru.practicum.event.service.EventService;
 
 import javax.validation.constraints.Positive;
@@ -46,14 +47,14 @@ public class AdminEventController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<EventDto> getAllEventsAdmin(@RequestParam Optional<List<Integer>> users,
-                                            @RequestParam Optional<List<String>> states,
-                                            @RequestParam Optional<List<Integer>> categories,
-                                            @RequestParam Optional<String> start,
-                                            @RequestParam Optional<String> end,
-                                            @PositiveOrZero @RequestParam(defaultValue = "0") Integer from,
-                                            @Positive @RequestParam(defaultValue = "10") Integer size) {
+    public List<EventDto> getAllEventsAdmin(@RequestParam(required = false) List<Integer> users,
+                                            @RequestParam(required = false) List<EventState> states,
+                                            @RequestParam(required = false) List<Integer> categories,
+                                            @RequestParam(required = false, defaultValue = "null") String rangeStart,
+                                            @RequestParam(required = false, defaultValue = "null") String rangeEnd,
+                                            @PositiveOrZero @RequestParam(required = false, defaultValue = "0") Integer from,
+                                            @Positive @RequestParam(required = false, defaultValue = "10") Integer size) {
         log.info("GET ADMIN all event with params");
-        return eventService.getAllEventsAdmin(users, states, categories, start, end, from, size);
+        return eventService.getAllEventsAdmin(users, states, categories, rangeStart, rangeEnd, from, size);
     }
 }

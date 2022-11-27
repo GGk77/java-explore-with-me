@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.category.service.CategoryService;
@@ -12,6 +13,7 @@ import ru.practicum.error.exception.BadRequestException;
 import ru.practicum.error.exception.NotFoundException;
 import ru.practicum.error.exception.ValidationException;
 import ru.practicum.event.dto.*;
+import ru.practicum.event.enums.EventSort;
 import ru.practicum.event.enums.EventState;
 import ru.practicum.event.mapper.EventMapper;
 import ru.practicum.event.model.Event;
@@ -20,6 +22,7 @@ import ru.practicum.user.model.User;
 import ru.practicum.user.service.UserService;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,7 +30,6 @@ import java.util.Optional;
 @Slf4j
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-//todo
 public class EventServiceImpl implements EventService {
 
     @Autowired
@@ -56,6 +58,7 @@ public class EventServiceImpl implements EventService {
 
     @Transactional
     public EventDto update(UpdateEventDto updateEventDto, Integer userId) {
+        log.debug("Update user parameters event, SERVICE");
         if (LocalDateTime.now().plusHours(2).isAfter(updateEventDto.getEventDate())) {
             throw new ValidationException("bad data");
         }
@@ -92,10 +95,12 @@ public class EventServiceImpl implements EventService {
 
     @Transactional
     public EventDto cancelEventById(Integer userId, Integer eventId) {
+        log.debug("Cancel event by id, SERVICE");
         User user = userService.getEntityById(userId); // ?? todo нужен ли?
         Event event = getEntityById(eventId);
         event.setState(EventState.CANCELED);
         eventRepository.save(event);
+        log.debug("Event canceled, SERVICE");
         return EventMapper.toEventDto(event);
     }
 
@@ -107,30 +112,69 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<EventShortDto> getAllEventsPublic(Optional<String> text, Optional<List<Integer>> categories, Optional<Boolean> paid, Optional<String> start, Optional<String> end, Optional<String> available, Optional<String> sort, Integer from, Integer size) {
-        return null;
-        //todo
+    public List<EventShortDto> getAllEventsPublic(String text, List<Integer> categories, Boolean paid,
+                                                  String rangeStart, String rangeEnd, Boolean onlyAvailable,
+                                                  String sort, Integer from, Integer size) {
+
+        String sorting;
+        if (sort.equals(EventSort.EVENT_DATE.toString())) {
+            sorting = "eventDate";
+        } else if (sort.equals(EventSort.VIEWS.toString())) {
+            sorting = "views";
+        } else {
+            sorting = "id";
+        }
+        LocalDateTime start;
+        if (rangeStart.equals("null")) {
+            start = LocalDateTime.now();
+        } else {
+            start = LocalDateTime.parse(rangeStart, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        }
+        LocalDateTime end;
+        if (rangeEnd.equals("null")) {
+            end = LocalDateTime.now().plusYears(100);
+        } else {
+            end = LocalDateTime.parse(rangeEnd, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        }
+        Pageable pageable = PageRequest.of(from / size, size, Sort.by(sorting));
+        log.info("parameters: text - {}, categories - {}, paid - {}, rangeStart - {}, rangeEnd - {}, " +
+                        "onlyAvailable - {}, sort - {}, from - {}, size - {}", text, categories, paid, start, end,
+                onlyAvailable, sort, from, size);
+        List<Event> sortedEvents = eventRepository.getFilteredEvents(text, categories,
+                paid, start, end, pageable);
+
+        if (onlyAvailable) {
+            sortedEvents.removeIf(event -> event.getParticipants().size() == event.getParticipantLimit());
+        }
+        eventRepository.saveAll(sortedEvents);
+        return EventMapper.toEventShortDto(sortedEvents);
     }
+
 
     @Override
     public EventDto acceptEventById(Integer eventId) {
+        log.debug("Accept event by id, SERVICE");
         Event event = getEntityById(eventId);
         event.setState(EventState.PUBLISHED);
         event.setPublishedOn(LocalDateTime.now());
         eventRepository.save(event);
+        log.debug("Event accepted, SERVICE");
         return EventMapper.toEventDto(event);
     }
 
     @Override
     public EventDto rejectEventById(Integer eventId) {
+        log.debug("Reject event by id, SERVICE");
         Event event = getEntityById(eventId);
         event.setState(EventState.CANCELED);
         eventRepository.save(event);
+        log.debug("Event rejected, SERVICE");
         return EventMapper.toEventDto(event);
     }
 
     @Transactional
     public EventDto updateAdmin(AdminUpdateDto adminUpdateDto, Integer eventId) {
+        log.debug("Update admin parameters event, SERVICE");
         Event event = getEntityById(eventId);
         Optional.ofNullable(adminUpdateDto.getRequestModeration()).ifPresent(event::setModeration);
         Optional.ofNullable(adminUpdateDto.getRequestModeration()).ifPresent(location -> {
@@ -143,9 +187,26 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<EventDto> getAllEventsAdmin(Optional<List<Integer>> users, Optional<List<String>> states, Optional<List<Integer>> categories, Optional<String> start, Optional<String> end, Integer from, Integer size) {
-        return null;
-        //todo
+    public List<EventDto> getAllEventsAdmin(List<Integer> users, List<EventState> states, List<Integer> categories,
+                                            String rangeStart, String rangeEnd, Integer from, Integer size) {
+
+        LocalDateTime start;
+        LocalDateTime end;
+        if (!rangeStart.equals("null")) {
+            start = LocalDateTime.parse(rangeStart, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        } else {
+            start = LocalDateTime.now();
+        }
+        if (!rangeEnd.equals("null")) {
+            end = LocalDateTime.parse(rangeEnd, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        } else {
+            end = LocalDateTime.now().plusYears(1);
+        }
+        Pageable pageable = PageRequest.of(from / size, size, Sort.by("id"));
+        log.info("parameters: users - {}, states - {}, categories - {}, rangeStart - {}, rangeEnd - {}," +
+                " from - {}, size - {}", users, states, categories, start, end, from, size);
+        return EventMapper.toEventDtoList(eventRepository.findAllUsersEvents(users, categories, states,
+                start, end, pageable));
     }
 
     @Override
@@ -162,6 +223,16 @@ public class EventServiceImpl implements EventService {
 
     private EventDto updateEvent(Event event, LocalDateTime eventDate, Boolean paid, String description,
                                  Integer participantLimit, String annotation, String title, Integer category) {
-        //todo
+        log.debug("Update parameters event, SERVICE");
+        Optional.ofNullable(eventDate).ifPresent(event::setEventDate);
+        Optional.ofNullable(paid).ifPresent(event::setPaid);
+        Optional.ofNullable(description).ifPresent(event::setDescription);
+        Optional.ofNullable(participantLimit).ifPresent(event::setParticipantLimit);
+        Optional.ofNullable(annotation).ifPresent(event::setAnnotation);
+        Optional.ofNullable(title).ifPresent(event::setTitle);
+        Optional.ofNullable(category).ifPresent(c -> event.setCategory(categoryService.getEntityById(c)));
+        eventRepository.save(event);
+        log.debug("Event updated id - {}, SERVICE", event.getId());
+        return EventMapper.toEventDto(event);
     }
 }
