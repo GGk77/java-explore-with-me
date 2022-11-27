@@ -46,9 +46,10 @@ public class AdminEventController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<EventDto> getAllEventsAdmin(@RequestParam(required = false) List<Integer> users,
-                                            @RequestParam(required = false) List<EventState> states,
-                                            @RequestParam(required = false) List<Integer> categories,
+    public List<EventDto> getAllEventsAdmin(@RequestParam List<Integer> users,
+                                            @RequestParam(defaultValue = "PUBLISHED," +
+                                                    " PENDING, CANCELED") List<EventState> states,
+                                            @RequestParam List<Integer> categories,
                                             @RequestParam(required = false, defaultValue = "null") String rangeStart,
                                             @RequestParam(required = false, defaultValue = "null") String rangeEnd,
                                             @PositiveOrZero @RequestParam(required = false, defaultValue = "0") Integer from,
