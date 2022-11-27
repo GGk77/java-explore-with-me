@@ -5,7 +5,6 @@ import ru.practicum.event.enums.EventState;
 import ru.practicum.event.model.Event;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface EventService {
 

@@ -13,7 +13,6 @@ import ru.practicum.event.service.EventService;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @Slf4j

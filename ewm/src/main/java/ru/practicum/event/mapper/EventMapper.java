@@ -1,6 +1,5 @@
 package ru.practicum.event.mapper;
 
-import org.springframework.data.domain.Page;
 import ru.practicum.category.dto.CategoryDto;
 import ru.practicum.event.dto.EventDto;
 import ru.practicum.event.dto.EventShortDto;
