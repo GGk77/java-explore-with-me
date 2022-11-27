@@ -25,14 +25,13 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class EventServiceImpl implements EventService {
-
-    static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @Autowired
     EventRepository eventRepository;
@@ -190,22 +189,15 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public List<EventDto> getAllEventsAdmin(List<Integer> users, List<EventState> states, List<Integer> categories,
-                                            String rangeStart, String rangeEnd, Integer from, Integer size) {
-        LocalDateTime start;
-        LocalDateTime end;
-        if (rangeStart.equals("null")) {
-            start = LocalDateTime.now();
-        } else {
-            start = LocalDateTime.parse(rangeStart, FORMATTER);
+                                            LocalDateTime rangeStart, LocalDateTime rangeEnd, Integer from, Integer size) {
+        Pageable pageable = PageRequest.of(from / size, size);
+        if (rangeStart == null) {
+            rangeStart = LocalDateTime.now();
         }
-        if (rangeEnd.equals("null")) {
-            end = LocalDateTime.now().plusYears(100);
-        } else {
-            end = LocalDateTime.parse(rangeEnd, FORMATTER);
-        }
-        Pageable pageable = PageRequest.of(from / size, size, Sort.by("id"));
-        return EventMapper.toEventDtoList(eventRepository.getAllUsersEvents(users, categories, states,
-                start, end, pageable));
+        return eventRepository.getAllUsersEvents(users, categories, states, rangeStart, rangeEnd, pageable)
+                .stream()
+                .map(EventMapper::toEventDto)
+                .collect(Collectors.toList());
     }
 
     @Override

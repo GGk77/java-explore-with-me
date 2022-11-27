@@ -4,6 +4,7 @@ import ru.practicum.event.dto.*;
 import ru.practicum.event.enums.EventState;
 import ru.practicum.event.model.Event;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface EventService {
@@ -31,7 +32,7 @@ public interface EventService {
     EventDto updateAdmin(AdminUpdateDto adminUpdateDto, Integer eventId);
 
     List<EventDto> getAllEventsAdmin(List<Integer> users, List<EventState> states, List<Integer> categories,
-                                     String rangeStart, String rangeEnd, Integer from, Integer size);
+                                     LocalDateTime rangeStart, LocalDateTime rangeEnd, Integer from, Integer size);
 
     Event getEntityById(Integer id);
 

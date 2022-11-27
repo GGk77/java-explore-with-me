@@ -3,6 +3,7 @@ package ru.practicum.event.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.event.dto.AdminUpdateDto;
@@ -12,6 +13,7 @@ import ru.practicum.event.service.EventService;
 
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -46,12 +48,13 @@ public class AdminEventController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<EventDto> getAllEventsAdmin(@RequestParam List<Integer> users,
-                                            @RequestParam(defaultValue = "PUBLISHED," +
-                                                    " PENDING, CANCELED") List<EventState> states,
-                                            @RequestParam List<Integer> categories,
-                                            @RequestParam(required = false, defaultValue = "null") String rangeStart,
-                                            @RequestParam(required = false, defaultValue = "null") String rangeEnd,
+    public List<EventDto> getAllEventsAdmin(@RequestParam(required = false) List<Integer> users,
+                                            @RequestParam(required = false) List<EventState> states,
+                                            @RequestParam(required = false) List<Integer> categories,
+                                            @RequestParam(name = "rangeStart", required = false)
+                                            @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeStart,
+                                            @RequestParam(name = "rangeEnd", required = false)
+                                            @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeEnd,
                                             @PositiveOrZero @RequestParam(required = false, defaultValue = "0") Integer from,
                                             @Positive @RequestParam(required = false, defaultValue = "10") Integer size) {
         log.info("GET ADMIN all event with params");

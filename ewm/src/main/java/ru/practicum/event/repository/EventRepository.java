@@ -16,14 +16,15 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
 
     List<Event> getByInitiator_IdOrderByEventDateDesc(Integer id, Pageable pageable);
 
-    @Query("SELECT e FROM Event e " +
-            "WHERE (e.initiator.id in (?1) or (?1) is null) " +
-            "and (e.category.id in (?2) or (?2) is null) " +
-            "and (e.state in (?3) or (?3) is null) " +
-            "and e.eventDate > ?4 " +
-            "and e.eventDate < ?5")
-    List<Event> getAllUsersEvents(List<Integer> users, List<Integer> categories, List<EventState> states,
-                                   LocalDateTime start, LocalDateTime end, Pageable pageable);
+    @Query("SELECT e FROM Event AS e " +
+            "WHERE ((:users) IS NULL OR e.initiator.id IN :users) " +
+            "AND ((:states) IS NULL OR e.state IN :states) " +
+            "AND ((:catIds) IS NULL OR e.category.id IN :catIds) " +
+            "AND (e.eventDate >= :rangeStart) " +
+            "AND CAST(:rangeEnd AS date) IS NULL OR e.eventDate <= :rangeEnd " +
+            "order by e.id desc ")
+    List<Event> getAllUsersEvents(List<Integer> users, List<Integer> catIds, List<EventState> states,
+                                   LocalDateTime rangeStart, LocalDateTime rangeEnd, Pageable pageable);
 
     @Query("SELECT e FROM Event e " +
             "WHERE (upper(e.annotation) like upper(CONCAT('%',?1,'%')) " +
