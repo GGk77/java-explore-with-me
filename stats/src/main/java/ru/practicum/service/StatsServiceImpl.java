@@ -20,6 +20,7 @@ public class StatsServiceImpl implements StatsService {
 
     @Autowired
     StatsRepository statsRepository;
+
     @Override
     public EndpointStatsClientDto save(EndpointStatsClientDto endpointStatsClientDto) {
         EndpointStatsClient endpointStatsClient = EndpointStatsMapper.toEndpointStatsClient(endpointStatsClientDto);
@@ -28,7 +29,7 @@ public class StatsServiceImpl implements StatsService {
 
     @Override
     public List<ViewStats> getViewStats(LocalDateTime startDate, LocalDateTime endDate, List<String> uriIds, Boolean unique) {
-        if(!unique) {
+        if (!unique) {
             return statsRepository.getAll(startDate, endDate, uriIds);
         } else return statsRepository.getAllUnique(startDate, endDate, uriIds, unique);
     }

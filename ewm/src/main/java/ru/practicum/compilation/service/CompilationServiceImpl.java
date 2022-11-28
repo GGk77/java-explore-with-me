@@ -51,7 +51,6 @@ public class CompilationServiceImpl implements CompilationService {
     public void createPinInCompilation(Integer compId) {
         log.debug("Create pin in compilation with id= {}, SERVICE", compId);
         Compilation compilation = getEntityById(compId);
-        //todo check pinned?
         compilation.setPinned(true);
         compilationRepository.save(compilation);
         log.debug("Compilation with id = {}, pinned", compId);
@@ -61,7 +60,6 @@ public class CompilationServiceImpl implements CompilationService {
     public void deletePinInCompilation(Integer compId) {
         log.debug("Delete pin in compilation with id= {}, SERVICE", compId);
         Compilation compilation = getEntityById(compId);
-        //todo check pinned?
         compilation.setPinned(false);
         compilationRepository.save(compilation);
         log.debug("Compilation with id = {}, unpinned", compId);
@@ -73,7 +71,6 @@ public class CompilationServiceImpl implements CompilationService {
         Event event = eventService.getEntityById(eventId);
         Compilation compilation = getEntityById(compId);
         List<Event> eventList = compilation.getEvents();
-        //todo check event in eventList?
         eventList.add(event);
         compilation.setEvents(eventList);
         compilationRepository.save(compilation);
@@ -86,7 +83,6 @@ public class CompilationServiceImpl implements CompilationService {
         Event event = eventService.getEntityById(eventId);
         Compilation compilation = getEntityById(compId);
         List<Event> eventList = compilation.getEvents();
-        //todo check event in eventList?
         eventList.remove(event);
         compilation.setEvents(eventList);
         compilationRepository.save(compilation);
@@ -120,5 +116,4 @@ public class CompilationServiceImpl implements CompilationService {
         return compilationRepository.findById(compId)
                 .orElseThrow(() -> new NotFoundException("Compilation with id =" + compId + " not found"));
     }
-
 }

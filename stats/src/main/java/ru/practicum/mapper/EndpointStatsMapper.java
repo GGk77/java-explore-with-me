@@ -1,8 +1,10 @@
 package ru.practicum.mapper;
 
+import org.springframework.stereotype.Component;
 import ru.practicum.dto.EndpointStatsClientDto;
 import ru.practicum.model.EndpointStatsClient;
 
+@Component
 public class EndpointStatsMapper {
 
     public static EndpointStatsClient toEndpointStatsClient(EndpointStatsClientDto endPointStatsClientDto) {

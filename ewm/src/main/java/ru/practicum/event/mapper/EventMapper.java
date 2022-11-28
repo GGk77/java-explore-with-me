@@ -1,5 +1,6 @@
 package ru.practicum.event.mapper;
 
+import org.springframework.stereotype.Component;
 import ru.practicum.category.dto.CategoryDto;
 import ru.practicum.event.dto.EventDto;
 import ru.practicum.event.dto.EventShortDto;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Component
 public class EventMapper {
     public static Event toEvent(NewEventDto eventDto) {
         return Event.builder()
@@ -76,10 +78,6 @@ public class EventMapper {
                 .initiator(UserMapper.toUserShortDto(event.getInitiator()))
                 .views(event.getViews())
                 .build();
-    }
-
-    public static List<EventDto> toEventDtoList(List<Event> event) {
-        return event.stream().map(EventMapper::toEventDto).collect(Collectors.toList());
     }
 
     public static List<EventShortDto> toEventShortDto(List<Event> event) {

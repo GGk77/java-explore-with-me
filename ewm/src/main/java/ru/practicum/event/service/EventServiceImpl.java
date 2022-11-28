@@ -89,7 +89,6 @@ public class EventServiceImpl implements EventService {
     @Override
     public EventDto getEventByUserId(Integer userId, Integer eventId) {
         log.debug("Get event by user id= {}, event id= {}  | SERVICE", userId, eventId);
-        User user = userService.getEntityById(userId); // ?? todo нужен ли?
         Event event = getEntityById(eventId);
         return EventMapper.toEventDto(event);
     }
@@ -97,7 +96,6 @@ public class EventServiceImpl implements EventService {
     @Transactional
     public EventDto cancelEventById(Integer userId, Integer eventId) {
         log.debug("Cancel event by id, SERVICE");
-        User user = userService.getEntityById(userId); // ?? todo нужен ли?
         Event event = getEntityById(eventId);
         event.setState(EventState.CANCELED);
         eventRepository.save(event);
@@ -113,10 +111,8 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<EventShortDto> getAllEventsPublic(String text, List<Integer> categories, Boolean paid,
-                                                  String rangeStart, String rangeEnd, Boolean onlyAvailable,
-                                                  String sort, Integer from, Integer size) {
-
+    public List<EventShortDto> getAllEventsPublic(String text, List<Integer> categories, Boolean paid, String rangeStart,
+                                                  String rangeEnd, Boolean onlyAvailable, String sort, Integer from, Integer size) {
         String sorting;
         LocalDateTime start;
         LocalDateTime end;
@@ -138,12 +134,8 @@ public class EventServiceImpl implements EventService {
             end = LocalDateTime.parse(rangeEnd, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         }
         Pageable pageable = PageRequest.of(from / size, size, Sort.by(sorting));
-        log.info("parameters: text - {}, categories - {}, paid - {}, rangeStart - {}, rangeEnd - {}, " +
-                        "onlyAvailable - {}, sort - {}, from - {}, size - {}", text, categories, paid, start, end,
-                onlyAvailable, sort, from, size);
-        List<Event> sortedEvents = eventRepository.getFilterEvents(text, categories,
-                paid, start, end, pageable);
-
+        log.info("get all filtered events");
+        List<Event> sortedEvents = eventRepository.getFilterEvents(text, categories, paid, start, end, pageable);
         if (onlyAvailable) {
             sortedEvents.removeIf(event -> event.getParticipants().size() == event.getParticipantLimit());
         }
@@ -151,8 +143,7 @@ public class EventServiceImpl implements EventService {
         return EventMapper.toEventShortDto(sortedEvents);
     }
 
-
-    @Override
+    @Transactional
     public EventDto acceptEventById(Integer eventId) {
         log.debug("Accept event by id, SERVICE");
         Event event = getEntityById(eventId);
@@ -163,7 +154,7 @@ public class EventServiceImpl implements EventService {
         return EventMapper.toEventDto(event);
     }
 
-    @Override
+    @Transactional
     public EventDto rejectEventById(Integer eventId) {
         log.debug("Reject event by id, SERVICE");
         Event event = getEntityById(eventId);
@@ -202,8 +193,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public Event getEntityById(Integer id) {
-        return eventRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("event with id =" + id + " not found"));
+        return eventRepository.findById(id).orElseThrow(() -> new NotFoundException("event with id =" + id + " not found"));
     }
 
     @Override
@@ -212,8 +202,8 @@ public class EventServiceImpl implements EventService {
         return eventRepository.getByIdIn(ids);
     }
 
-    private EventDto updateEvent(Event event, LocalDateTime eventDate, Boolean paid, String description,
-                                 Integer participantLimit, String annotation, String title, Integer category) {
+    EventDto updateEvent(Event event, LocalDateTime eventDate, Boolean paid, String description,
+                         Integer participantLimit, String annotation, String title, Integer category) {
         log.debug("Update parameters event, SERVICE");
         Optional.ofNullable(eventDate).ifPresent(event::setEventDate);
         Optional.ofNullable(paid).ifPresent(event::setPaid);

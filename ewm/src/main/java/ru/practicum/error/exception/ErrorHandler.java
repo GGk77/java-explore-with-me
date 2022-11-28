@@ -19,13 +19,6 @@ import java.util.Collections;
 @Slf4j
 public class ErrorHandler {
 
-    public static String parse(Throwable exception) {
-        StringWriter writer = new StringWriter();
-        PrintWriter printer = new PrintWriter(writer);
-        exception.printStackTrace(printer);
-        return writer.toString();
-    }
-
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler
     public ApiError handleNotFoundException(final NotFoundException e) {
@@ -89,4 +82,10 @@ public class ErrorHandler {
                 .build();
     }
 
+    static String parse(Throwable exception) {
+        StringWriter writer = new StringWriter();
+        PrintWriter printer = new PrintWriter(writer);
+        exception.printStackTrace(printer);
+        return writer.toString();
+    }
 }

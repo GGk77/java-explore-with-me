@@ -33,7 +33,6 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
             "and e.paid = ?3 " +
             "and e.eventDate > ?4 " +
             "and e.eventDate < ?5")
-    List<Event> getFilterEvents(String text, List<Integer> categories,
-                                  Boolean paid, LocalDateTime start, LocalDateTime end,
-                                  Pageable pageable);
+    List<Event> getFilterEvents(String text, List<Integer> categories, Boolean paid,
+                                LocalDateTime start, LocalDateTime end, Pageable pageable);
 }
