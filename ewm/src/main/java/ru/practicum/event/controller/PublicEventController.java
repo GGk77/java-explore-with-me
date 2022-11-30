@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.event.dto.EventDto;
 import ru.practicum.event.dto.EventShortDto;
 import ru.practicum.event.service.EventService;
+import ru.practicum.stats.StatsClient;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.Positive;
@@ -25,11 +26,16 @@ public class PublicEventController {
     @Autowired
     EventService eventService;
 
+    @Autowired
+    StatsClient statsClient;
+
     @GetMapping("/{eventId}")
     @ResponseStatus(HttpStatus.OK)
-    public EventDto getEventByIdPublic(@PathVariable Integer eventId, HttpServletRequest request) {
+    public EventDto getEventByIdPublic(@PathVariable Integer eventId, HttpServletRequest httpServletRequest) {
         log.info("GET events/eventId = {}", eventId);
-        return eventService.getEventByIdPublic(eventId, request);
+        log.info("uri in request: " + httpServletRequest.getRequestURI());
+        statsClient.save(httpServletRequest);
+        return eventService.getEventByIdPublic(eventId, httpServletRequest);
     }
 
 
@@ -45,7 +51,10 @@ public class PublicEventController {
                                                   @RequestParam(defaultValue = "false") Boolean onlyAvailable,
                                                   @RequestParam(defaultValue = "id") String sort,
                                                   @PositiveOrZero @RequestParam(defaultValue = "0") Integer from,
-                                                  @Positive @RequestParam(defaultValue = "10") Integer size) {
+                                                  @Positive @RequestParam(defaultValue = "10") Integer size,
+                                                  HttpServletRequest httpServletRequest) {
+        log.info("uri in request: " + httpServletRequest.getRequestURI());
+        statsClient.save(httpServletRequest);
         log.info("GET PUBLIC all event with params");
         return eventService.getAllEventsPublic(text, categoryIds, paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size);
     }

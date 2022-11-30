@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Builder
 @Entity
 @Table(name = "stats")
-public class EndpointStatsClient {
+public class Stats {
 
     @Id
     @Column(name = "id")
