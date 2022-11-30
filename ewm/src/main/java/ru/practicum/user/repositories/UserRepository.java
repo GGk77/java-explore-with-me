@@ -10,6 +10,6 @@ import java.util.List;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
-    @Query("select u from User u where u.id = ?1 order by u.id")
+    @Query("select u from User u where u.id = :ids")
     List<User> getByIdOrderByIdAsc(List<Integer> ids, Pageable pageable);
 }

@@ -21,9 +21,10 @@ import ru.practicum.event.repository.EventRepository;
 import ru.practicum.user.model.User;
 import ru.practicum.user.service.UserService;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -104,18 +105,16 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public EventDto getEventByIdPublic(Integer eventId) {
+    public EventDto getEventByIdPublic(Integer eventId, HttpServletRequest request) {
         log.debug("Get event by id= {}, SERVICE", eventId);
         Event event = getEntityById(eventId);
         return EventMapper.toEventDto(event);
     }
 
     @Override
-    public List<EventShortDto> getAllEventsPublic(String text, List<Integer> categories, Boolean paid, String rangeStart,
-                                                  String rangeEnd, Boolean onlyAvailable, String sort, Integer from, Integer size) {
+    public List<EventShortDto> getAllEventsPublic(String text, List<Integer> catIds, Boolean paid, LocalDateTime rangeStart,
+                                                  LocalDateTime rangeEnd, Boolean onlyAvailable, String sort, Integer from, Integer size) {
         String sorting;
-        LocalDateTime start;
-        LocalDateTime end;
         if (sort.equals(EventSort.EVENT_DATE.toString())) {
             sorting = "eventDate";
         } else if (sort.equals(EventSort.VIEWS.toString())) {
@@ -123,19 +122,15 @@ public class EventServiceImpl implements EventService {
         } else {
             sorting = "id";
         }
-        if (rangeStart.equals("null")) {
-            start = LocalDateTime.now();
-        } else {
-            start = LocalDateTime.parse(rangeStart, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        if (Objects.isNull(rangeStart)) {
+            rangeStart = LocalDateTime.now();
         }
-        if (rangeEnd.equals("null")) {
-            end = LocalDateTime.now().plusYears(100);
-        } else {
-            end = LocalDateTime.parse(rangeEnd, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        if (Objects.isNull(rangeEnd)) {
+            rangeEnd = LocalDateTime.now().plusYears(100);
         }
         Pageable pageable = PageRequest.of(from / size, size, Sort.by(sorting));
         log.info("get all filtered events");
-        List<Event> sortedEvents = eventRepository.getFilterEvents(text, categories, paid, start, end, pageable);
+        List<Event> sortedEvents = eventRepository.getFilterEvents(text, catIds, paid, rangeStart, rangeEnd, pageable);
         if (onlyAvailable) {
             sortedEvents.removeIf(event -> event.getParticipants().size() == event.getParticipantLimit());
         }

@@ -50,7 +50,7 @@ public class AdminEventController {
     @ResponseStatus(HttpStatus.OK)
     public List<EventDto> getAllEventsAdmin(@RequestParam(required = false) List<Integer> users,
                                             @RequestParam(required = false) List<EventState> states,
-                                            @RequestParam(required = false) List<Integer> categories,
+                                            @RequestParam(name = "categories", required = false) List<Integer> categoryIds,
                                             @RequestParam(name = "rangeStart", required = false)
                                             @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeStart,
                                             @RequestParam(name = "rangeEnd", required = false)
@@ -58,6 +58,6 @@ public class AdminEventController {
                                             @PositiveOrZero @RequestParam(required = false, defaultValue = "0") Integer from,
                                             @Positive @RequestParam(required = false, defaultValue = "10") Integer size) {
         log.info("GET ADMIN all event with params");
-        return eventService.getAllEventsAdmin(users, states, categories, rangeStart, rangeEnd, from, size);
+        return eventService.getAllEventsAdmin(users, states, categoryIds, rangeStart, rangeEnd, from, size);
     }
 }

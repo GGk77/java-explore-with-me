@@ -50,10 +50,12 @@ public class UserServiceImpl implements UserService {
                     .stream()
                     .map(UserMapper::toUserDto)
                     .collect(Collectors.toList());
-        } else return userRepository.getByIdOrderByIdAsc(userIds, pageable)
-                .stream()
-                .map(UserMapper::toUserDto)
-                .collect(Collectors.toList());
+        } else {
+            return userRepository.getByIdOrderByIdAsc(userIds, pageable)
+                    .stream()
+                    .map(UserMapper::toUserDto)
+                    .collect(Collectors.toList());
+        }
     }
 
     public User getEntityById(Integer id) {

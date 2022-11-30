@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS "users"
 (
     user_id SERIAL PRIMARY KEY NOT NULL,
-    email   varchar(512)       NOT NULL,
+    email   varchar(64)       NOT NULL,
     name    varchar(512)       NOT NULL,
     CONSTRAINT UQ_USER_EMAIL UNIQUE (email),
     CONSTRAINT UQ_USER_NAME UNIQUE (name)

@@ -42,9 +42,8 @@ public class CompilationServiceImpl implements CompilationService {
     @Transactional
     public void delete(Integer compId) {
         log.debug("Delete category with id= {}, SERVICE", compId);
-        Compilation compilation = getEntityById(compId);
-        compilationRepository.delete(compilation);
-        log.debug("Compilation with id = {}, deleted", compilation.getId());
+        compilationRepository.deleteById(compId);
+        log.debug("Compilation with id = {}, deleted", compId);
     }
 
     @Transactional
@@ -105,10 +104,12 @@ public class CompilationServiceImpl implements CompilationService {
                     .stream()
                     .map(CompilationMapper::toCompilationDto)
                     .collect(Collectors.toList());
-        } else return compilationRepository.getByPinnedOrderByPinnedAsc(pinned, pageable)
-                .stream()
-                .map(CompilationMapper::toCompilationDto)
-                .collect(Collectors.toList());
+        } else {
+            return compilationRepository.getByPinnedOrderByPinnedAsc(pinned, pageable)
+                    .stream()
+                    .map(CompilationMapper::toCompilationDto)
+                    .collect(Collectors.toList());
+        }
     }
 
     @Override

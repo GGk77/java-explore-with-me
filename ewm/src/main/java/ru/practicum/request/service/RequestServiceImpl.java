@@ -52,7 +52,7 @@ public class RequestServiceImpl implements RequestService {
         if (event.getParticipants().size() >= event.getParticipantLimit()) {
             throw new BadRequestException("participants limit");
         }
-        if (requestRepository.existsByEvent_IdAndEvent_Initiator_Id(event.getId(), userId)) {
+        if (requestRepository.existsByEventIdAndEventInitiatorId(event.getId(), userId)) {
             throw new BadRequestException("request exist");
         }
         log.debug("request this id= {} create, SERVICE", request.getId());
@@ -68,7 +68,7 @@ public class RequestServiceImpl implements RequestService {
         if (event.getParticipants().size() == event.getParticipantLimit()) {
             throw new BadRequestException("participants limit");
         } else if (event.getParticipantLimit() - event.getParticipants().size() == 1) {
-            requestRepository.saveAll(requestRepository.getByEvent_IdAndStatus(eventId, Status.PENDING)
+            requestRepository.saveAll(requestRepository.getByEventIdAndStatus(eventId, Status.PENDING)
                     .stream()
                     .peek(e -> e.setStatus(Status.CANCELED))
                     .collect(Collectors.toList()));
@@ -93,7 +93,7 @@ public class RequestServiceImpl implements RequestService {
     @Override
     public List<RequestDto> getAllRequestsByInitiatorId(Integer userId, Integer eventId) {
         log.debug("GET all requests by initiator_id, SERVICE");
-        List<Request> requestList = requestRepository.getByEvent_Initiator_IdAndEvent_Id(userId, eventId);
+        List<Request> requestList = requestRepository.getByEventInitiatorIdAndEventId(userId, eventId);
         return requestList.stream()
                 .map(RequestMapper::toRequestDto)
                 .collect(Collectors.toList());
@@ -116,7 +116,7 @@ public class RequestServiceImpl implements RequestService {
     @Override
     public List<RequestDto> getAllByParticipationId(Integer userId) {
         log.debug("Get all requests by id= {}, SERVICE", userId);
-        List<Request> requestList = requestRepository.getByRequester_Id(userId);
+        List<Request> requestList = requestRepository.getByRequesterId(userId);
         return requestList.stream()
                 .map(RequestMapper::toRequestDto)
                 .collect(Collectors.toList());
