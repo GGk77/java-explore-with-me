@@ -19,6 +19,10 @@ public class StatsClient  {
     @Value("${app-name}")
     private String appName;
 
+
+
+
+
     public void save(HttpServletRequest request) {
         String ip = request.getRemoteAddr();
         String uri = request.getRequestURI();
