@@ -31,7 +31,7 @@ public class StatsServiceImpl implements StatsService {
     @Override
     public List<ViewStats> getViewStats(LocalDateTime startDate, LocalDateTime endDate, List<String> uris, Boolean unique) {
         if (unique) {
-            return statsRepository.getAllUnique(startDate, endDate, uris, true);
+            return statsRepository.getAllUnique(startDate, endDate, uris, unique);
         } else {
             return statsRepository.getAll(startDate, endDate, uris);
         }

@@ -12,5 +12,5 @@ public class EwmViewStats {
 
     String uri;
 
-    Integer hits;
+    Long hits;
 }

@@ -24,7 +24,7 @@ public interface EventService {
 
     List<EventShortDto> getAllEventsPublic(String text, List<Integer> catIds, Boolean paid,
                                            LocalDateTime rangeStart, LocalDateTime rangeEnd, Boolean onlyAvailable,
-                                           String sort, Integer from, Integer size);
+                                           String sort, Integer from, Integer size, HttpServletRequest httpServletRequest);
 
     EventDto acceptEventById(Integer eventId);
 

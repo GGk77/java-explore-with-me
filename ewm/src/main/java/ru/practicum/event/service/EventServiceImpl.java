@@ -18,6 +18,8 @@ import ru.practicum.event.enums.EventState;
 import ru.practicum.event.mapper.EventMapper;
 import ru.practicum.event.model.Event;
 import ru.practicum.event.repository.EventRepository;
+import ru.practicum.stats.StatsClient;
+import ru.practicum.stats.StatsMapper;
 import ru.practicum.user.model.User;
 import ru.practicum.user.service.UserService;
 
@@ -42,6 +44,10 @@ public class EventServiceImpl implements EventService {
 
     @Autowired
     CategoryService categoryService;
+
+    @Autowired
+    StatsClient statsClient;
+
 
     @Transactional
     public EventDto create(NewEventDto newEventDto, Integer userId) {
@@ -105,15 +111,17 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public EventDto getEventByIdPublic(Integer eventId, HttpServletRequest request) {
+    public EventDto getEventByIdPublic(Integer eventId, HttpServletRequest httpServletRequest) {
         log.debug("Get event by id= {}, SERVICE", eventId);
+        statsClient.postStats(StatsMapper.toEndpointHitDto("ewm-server", httpServletRequest));
         Event event = getEntityById(eventId);
         return EventMapper.toEventDto(event);
     }
 
     @Override
     public List<EventShortDto> getAllEventsPublic(String text, List<Integer> catIds, Boolean paid, LocalDateTime rangeStart,
-                                                  LocalDateTime rangeEnd, Boolean onlyAvailable, String sort, Integer from, Integer size) {
+                                                  LocalDateTime rangeEnd, Boolean onlyAvailable, String sort, Integer from, Integer size, HttpServletRequest httpServletRequest) {
+        statsClient.postStats(StatsMapper.toEndpointHitDto("ewm-server", httpServletRequest));
         String sorting;
         if (sort.equals(EventSort.EVENT_DATE.toString())) {
             sorting = "eventDate";
