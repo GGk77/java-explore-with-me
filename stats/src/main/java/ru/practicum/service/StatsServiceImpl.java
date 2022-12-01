@@ -4,9 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.practicum.dto.EndpointStatsClientDto;
-import ru.practicum.mapper.EndpointStatsMapper;
-import ru.practicum.model.EndpointStatsClient;
+import ru.practicum.dto.StatsDto;
+import ru.practicum.mapper.StatsMapper;
+import ru.practicum.model.Stats;
 import ru.practicum.model.ViewStats;
 import ru.practicum.repository.StatsRepository;
 
@@ -22,15 +22,18 @@ public class StatsServiceImpl implements StatsService {
     StatsRepository statsRepository;
 
     @Override
-    public EndpointStatsClientDto save(EndpointStatsClientDto endpointStatsClientDto) {
-        EndpointStatsClient endpointStatsClient = EndpointStatsMapper.toEndpointStatsClient(endpointStatsClientDto);
-        return EndpointStatsMapper.toEndpointStatsClientDto(statsRepository.save(endpointStatsClient));
+    public StatsDto save(StatsDto statsDto) {
+        Stats stats = StatsMapper.toStats(statsDto);
+        stats.setTimestamp(LocalDateTime.now());
+        return StatsMapper.toStatsDto(statsRepository.save(stats));
     }
 
     @Override
-    public List<ViewStats> getViewStats(LocalDateTime startDate, LocalDateTime endDate, List<String> uriIds, Boolean unique) {
-        if (!unique) {
-            return statsRepository.getAll(startDate, endDate, uriIds);
-        } else return statsRepository.getAllUnique(startDate, endDate, uriIds, unique);
+    public List<ViewStats> getViewStats(LocalDateTime startDate, LocalDateTime endDate, List<String> uris, Boolean unique) {
+        if (unique) {
+            return statsRepository.getAllUnique(startDate, endDate, uris, true);
+        } else {
+            return statsRepository.getAll(startDate, endDate, uris);
+        }
     }
 }

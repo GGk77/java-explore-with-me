@@ -12,8 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class EndpointStatsClientDto {
-
+public class StatsDto {
     Integer id;
 
     @NotBlank

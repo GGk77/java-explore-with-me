@@ -7,7 +7,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ViewStats {
+public class EwmViewStats {
     String app;
 
     String uri;
