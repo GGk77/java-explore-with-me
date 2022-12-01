@@ -57,7 +57,7 @@ public class EventMapper {
                         .lon(event.getLon())
                         .build())
                 .initiator(UserMapper.toUserShortDto(event.getInitiator()))
-                .views(event.getViews())
+                .views(null)
                 .build();
     }
 
@@ -76,7 +76,7 @@ public class EventMapper {
                         .name(event.getCategory().getName())
                         .build())
                 .initiator(UserMapper.toUserShortDto(event.getInitiator()))
-                .views(event.getViews())
+                .views(null)
                 .build();
     }
 

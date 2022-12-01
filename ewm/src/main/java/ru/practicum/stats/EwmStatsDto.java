@@ -2,9 +2,9 @@ package ru.practicum.stats;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Getter
@@ -13,8 +13,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class EwmStatsDto {
-
-    Integer id;
 
     @NotBlank
     String app;
@@ -25,7 +23,7 @@ public class EwmStatsDto {
     @NotBlank
     String ip;
 
-    @NotNull
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss", iso = DateTimeFormat.ISO.DATE_TIME)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime timestamp;
 }

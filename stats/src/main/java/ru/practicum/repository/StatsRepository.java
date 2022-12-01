@@ -4,7 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Controller;
 import ru.practicum.model.Stats;
-import ru.practicum.model.ViewStats;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -12,17 +11,13 @@ import java.util.List;
 @Controller
 public interface StatsRepository extends JpaRepository<Stats, Integer> {
 
-    @Query("SELECT new ru.practicum.model.ViewStats(s.app, s.uri, COUNT (s.ip)) " +
-            "FROM Stats s " +
-            "WHERE s.timestamp> ?1 AND s.timestamp< ?2 " +
-            "AND s.uri IN ?3 " +
-            "GROUP BY s.app, s.uri")
-    List<ViewStats> getAll(LocalDateTime start, LocalDateTime end, List<String> uris);
+    List<Stats> findAllByUri(String uri);
 
-    @Query("SELECT new ru.practicum.model.ViewStats(s.app, s.uri, COUNT (DISTINCT s.ip)) " +
-            "FROM Stats s " +
-            "WHERE s.timestamp> ?1 AND s.timestamp< ?2 " +
-            "AND s.uri IN ?3 " +
-            "GROUP BY s.app, s.uri")
-    List<ViewStats> getAllUnique(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique);
+    @Query(value = "SELECT DISTINCT s.app, s.uri, s.ip FROM Stats as s WHERE s.uri = ?1")
+    List<Stats> findDistinctByUriAndIpAndApp(String uri);
+
+    List<Stats> findAllByUriAndTimestampBetween(String uri, LocalDateTime start, LocalDateTime end);
+
+    @Query(value = "SELECT DISTINCT s.app, s.uri, s.ip FROM Stats as s WHERE s.uri = ?1 AND s.timestamp BETWEEN ?2 AND ?3")
+    List<Stats> findDistinctByUriAndTimestampBetween(String uri, LocalDateTime start, LocalDateTime end);
 }

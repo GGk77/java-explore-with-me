@@ -18,8 +18,8 @@ import ru.practicum.event.enums.EventState;
 import ru.practicum.event.mapper.EventMapper;
 import ru.practicum.event.model.Event;
 import ru.practicum.event.repository.EventRepository;
+import ru.practicum.stats.EwmStatsDto;
 import ru.practicum.stats.StatsClient;
-import ru.practicum.stats.StatsMapper;
 import ru.practicum.user.model.User;
 import ru.practicum.user.service.UserService;
 
@@ -113,7 +113,7 @@ public class EventServiceImpl implements EventService {
     @Override
     public EventDto getEventByIdPublic(Integer eventId, HttpServletRequest httpServletRequest) {
         log.debug("Get event by id= {}, SERVICE", eventId);
-        statsClient.postStats(StatsMapper.toEndpointHitDto("ewm-server", httpServletRequest));
+        saveEndpointHit(httpServletRequest);
         Event event = getEntityById(eventId);
         return EventMapper.toEventDto(event);
     }
@@ -121,7 +121,7 @@ public class EventServiceImpl implements EventService {
     @Override
     public List<EventShortDto> getAllEventsPublic(String text, List<Integer> catIds, Boolean paid, LocalDateTime rangeStart,
                                                   LocalDateTime rangeEnd, Boolean onlyAvailable, String sort, Integer from, Integer size, HttpServletRequest httpServletRequest) {
-        statsClient.postStats(StatsMapper.toEndpointHitDto("ewm-server", httpServletRequest));
+        saveEndpointHit(httpServletRequest);
         String sorting;
         if (sort.equals(EventSort.EVENT_DATE.toString())) {
             sorting = "eventDate";
@@ -218,5 +218,14 @@ public class EventServiceImpl implements EventService {
         eventRepository.save(event);
         log.debug("Event updated id - {}, SERVICE", event.getId());
         return EventMapper.toEventDto(event);
+    }
+
+    void saveEndpointHit(HttpServletRequest request) {
+        EwmStatsDto ewmStatsDto = new EwmStatsDto(
+                request.getServerName(),
+                request.getRequestURI(),
+                request.getRemoteAddr(),
+                LocalDateTime.now());
+        statsClient.postStats(ewmStatsDto);
     }
 }

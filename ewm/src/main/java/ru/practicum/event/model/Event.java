@@ -79,7 +79,4 @@ public class Event {
             joinColumns = @JoinColumn(name = "event_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     List<User> participants = new ArrayList<>();
-
-    @Transient
-    Integer views;
 }

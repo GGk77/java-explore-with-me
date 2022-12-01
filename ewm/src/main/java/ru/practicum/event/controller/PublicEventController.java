@@ -11,8 +11,6 @@ import ru.practicum.event.dto.EventShortDto;
 import ru.practicum.event.service.EventService;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -36,17 +34,17 @@ public class PublicEventController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<EventShortDto> getAllEventsPublic(@RequestParam String text,
-                                                  @RequestParam(name = "categories") List<Integer> categoryIds,
-                                                  @RequestParam Boolean paid,
+    public List<EventShortDto> getAllEventsPublic(@RequestParam(required = false) String text,
+                                                  @RequestParam(required = false, name = "categories") List<Integer> categoryIds,
+                                                  @RequestParam(required = false) Boolean paid,
                                                   @RequestParam(required = false)
                                                   @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeStart,
                                                   @RequestParam(required = false)
                                                   @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeEnd,
-                                                  @RequestParam(defaultValue = "false") Boolean onlyAvailable,
-                                                  @RequestParam(defaultValue = "id") String sort,
-                                                  @PositiveOrZero @RequestParam(defaultValue = "0") Integer from,
-                                                  @Positive @RequestParam(defaultValue = "10") Integer size,
+                                                  @RequestParam(required = false, defaultValue = "false") Boolean onlyAvailable,
+                                                  @RequestParam(required = false, defaultValue = "id") String sort,
+                                                  @RequestParam(required = false, defaultValue = "0") Integer from,
+                                                  @RequestParam(required = false, defaultValue = "10") Integer size,
                                                   HttpServletRequest httpServletRequest) {
         log.info("uri in request: " + httpServletRequest.getRequestURI());
         log.info("GET PUBLIC all event with params");

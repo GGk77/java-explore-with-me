@@ -3,6 +3,9 @@ package ru.practicum.mapper;
 import org.springframework.stereotype.Component;
 import ru.practicum.dto.StatsDto;
 import ru.practicum.model.Stats;
+import ru.practicum.model.ViewStats;
+
+import java.util.List;
 
 @Component
 public class StatsMapper {
@@ -16,13 +19,14 @@ public class StatsMapper {
                 .build();
     }
 
-    public static StatsDto toStatsDto(Stats endPointStats) {
-        return StatsDto.builder()
-                .id(endPointStats.getId())
-                .app(endPointStats.getApp())
-                .uri(endPointStats.getUri())
-                .ip(endPointStats.getIp())
-                .timestamp(endPointStats.getTimestamp())
-                .build();
+    public static ViewStats toViewStats(List<Stats> statHit) {
+        if (statHit.isEmpty()) {
+            return new ViewStats();
+        }
+        return new ViewStats(
+                statHit.get(0).getApp(),
+                statHit.get(0).getUri(),
+                (long) statHit.size()
+        );
     }
 }

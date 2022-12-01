@@ -14,8 +14,9 @@ public class Client {
 
     protected final RestTemplate restTemplate;
 
-    protected ResponseEntity<Object> get(String path, @Nullable Map<String, Object> parameters) {
-        return makeAndSendRequest(HttpMethod.GET, path, parameters, null);
+    protected ResponseEntity<Object> get(@Nullable Map<String, Object> parameters) {
+        return makeAndSendRequest(HttpMethod.GET, "/stats?start={start}&end={end}&uris={uris}&unique={unique}",
+                parameters, null);
     }
 
     protected <T> void post(T body) {

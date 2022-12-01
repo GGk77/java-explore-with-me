@@ -24,17 +24,17 @@ public class StatsController {
     StatsService statsService;
 
     @PostMapping("/hit")
-    public StatsDto save(@Valid @RequestBody StatsDto statsDto) {
+    public void save(@Valid @RequestBody StatsDto statsDto) {
         log.info(" uri in controller: " + statsDto.getUri());
-        return statsService.save(statsDto);
+        statsService.save(statsDto);
     }
 
     @GetMapping("/stats")
     public List<ViewStats> getViewStats(
-            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime start,
-            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime end,
-            @RequestParam(required = false) List<String> uris,
-            @RequestParam(required = false, defaultValue = "false") Boolean unique) {
+            @RequestParam(name = "start") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime start,
+            @RequestParam(name = "end") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime end,
+            @RequestParam(name = "uris") List<String> uris,
+            @RequestParam(name = "unique") Boolean unique) {
         log.info("get views with params");
         return statsService.getViewStats(start, end, uris, unique);
     }
