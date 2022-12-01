@@ -22,7 +22,7 @@ public class StatsClient extends Client {
     public void save(HttpServletRequest request) {
         String ip = request.getRemoteAddr();
         String uri = request.getRequestURI();
-        post("/hit", new EndpointStatsClient(appName, uri, ip));
+        post(new EndpointStatsClient(appName, uri, ip));
     }
 
     public Object getViews(String uri) {

@@ -17,8 +17,8 @@ public class Client {
         return makeAndSendRequest(HttpMethod.GET, path, null);
     }
 
-    protected <T> ResponseEntity<Object> post(String path, T body) {
-        return makeAndSendRequest(HttpMethod.POST, path, body);
+    protected <T> void post(T body) {
+        makeAndSendRequest(HttpMethod.POST, "/hit", body);
     }
 
     <T> ResponseEntity<Object> makeAndSendRequest(HttpMethod method, String path, @Nullable T body) {
