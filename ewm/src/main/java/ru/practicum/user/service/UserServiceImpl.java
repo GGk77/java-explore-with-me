@@ -26,7 +26,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     UserRepository userRepository;
 
-    @Override
+    @Transactional
     public UserDto create(UserShortDto userDto) {
         log.debug("Create user, SERVICE");
         User user = userRepository.save(UserMapper.toUser(userDto));
