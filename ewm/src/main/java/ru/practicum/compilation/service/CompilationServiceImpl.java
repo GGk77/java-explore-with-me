@@ -30,7 +30,7 @@ public class CompilationServiceImpl implements CompilationService {
     @Autowired
     EventService eventService;
 
-    @Transactional
+    @Override
     public CompilationDto create(NewCompilationDto compilationDto) {
         log.trace("Create compilation, SERVICE dto: {}", compilationDto.toString());
         List<Event> eventList = eventService.getAllEventsByIds(compilationDto.getEvents());

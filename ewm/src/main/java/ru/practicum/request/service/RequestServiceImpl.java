@@ -36,7 +36,7 @@ public class RequestServiceImpl implements RequestService {
     @Autowired
     EventService eventService;
 
-    @Transactional
+    @Override
     public RequestDto create(Integer userId, Optional<Integer> eventId) {
         log.debug("Create request, SERVICE");
         Event event = eventService.getEntityById(eventId.orElseThrow(() -> new BadRequestException("event with id= " + eventId + " not found")));

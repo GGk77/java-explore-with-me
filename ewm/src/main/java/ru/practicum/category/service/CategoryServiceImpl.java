@@ -25,7 +25,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Autowired
     CategoryRepository categoryRepository;
 
-    @Transactional
+    @Override
     public CategoryDto create(CategoryDto categoryDto) {
         log.debug("Create category, SERVICE");
         Category category = categoryRepository.save(CategoryMapper.toCategory(categoryDto));

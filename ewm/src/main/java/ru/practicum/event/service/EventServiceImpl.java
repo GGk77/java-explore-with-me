@@ -49,7 +49,7 @@ public class EventServiceImpl implements EventService {
     StatsClient statsClient;
 
 
-    @Transactional
+    @Override
     public EventDto create(NewEventDto newEventDto, Integer userId) {
         log.debug("Create event, SERVICE");
         if (LocalDateTime.now().plusHours(2).isAfter(newEventDto.getEventDate())) {
