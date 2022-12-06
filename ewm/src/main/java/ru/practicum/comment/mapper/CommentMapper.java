@@ -20,7 +20,7 @@ public class CommentMapper {
                 .build();
     }
 
-    public static CommentDto toCommentDto (Comment comment) {
+    public static CommentDto toCommentDto(Comment comment) {
         return CommentDto.builder()
                 .id(comment.getId())
                 .userId(comment.getUser().getId())
