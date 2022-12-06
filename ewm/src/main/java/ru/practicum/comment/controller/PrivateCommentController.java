@@ -45,15 +45,16 @@ public class PrivateCommentController {
     @GetMapping("/{comId}")
     public CommentDto getCommentById(@PathVariable Integer userId,
                                      @PathVariable Integer comId) {
-        log.info("GET /users/{userId}/comments/{comId} ||  userId= {} || comId= {}", userId, comId);
+        log.info("GET /users/{userId}/comments/{comId} || userId= {} || comId= {}", userId, comId);
         return commentService.getCommentById(comId);
     }
 
-    @GetMapping("/{eventId}")
-    public List<CommentDto> getAllCommentInEvent(@PathVariable Integer userId,
-                                                @PathVariable Integer eventId) {
-        log.info("GET /users/{userId}/comments/{eventId}/ ||  userId= {} || eventId= {}", userId, eventId);
-        return commentService.getAllCommentInEvent(eventId);
+    @GetMapping
+    public List<CommentDto> getAllCommentsInEvent(@RequestParam Integer eventId,
+                                                 @RequestParam(defaultValue = "0") Integer from,
+                                                 @RequestParam(defaultValue = "10") Integer size) {
+        log.info("GET /users/{userId}/comments/{eventId}/ || eventId= {}", eventId);
+        return commentService.getAllCommentsInEvent(eventId, from, size);
     }
 
 }

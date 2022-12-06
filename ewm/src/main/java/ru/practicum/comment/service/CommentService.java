@@ -17,5 +17,5 @@ public interface CommentService {
 
     CommentDto getCommentById(Integer comId);
 
-    List<CommentDto> getAllCommentInEvent(Integer eventId);
+    List<CommentDto> getAllCommentsInEvent(Integer eventId, Integer from, Integer size);
 }

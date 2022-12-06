@@ -11,7 +11,7 @@ import java.time.Instant;
 @Component
 public class CommentMapper {
 
-    public Comment toComment(CommentDto commentDto, User user, Event event) {
+    public static Comment toComment(CommentDto commentDto, User user, Event event) {
         return Comment.builder()
                 .user(user)
                 .event(event)
@@ -20,7 +20,7 @@ public class CommentMapper {
                 .build();
     }
 
-    public CommentDto toCommentDto (Comment comment) {
+    public static CommentDto toCommentDto (Comment comment) {
         return CommentDto.builder()
                 .id(comment.getId())
                 .userId(comment.getUser().getId())

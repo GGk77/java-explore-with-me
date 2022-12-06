@@ -46,8 +46,8 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional
     public void delete(Integer categoryId) {
         log.debug("Delete category with id= {}, SERVICE", categoryId);
-            categoryRepository.deleteById(categoryId);
-            log.debug("Delete category with id= {}, SERVICE", categoryId);
+        categoryRepository.deleteById(categoryId);
+        log.debug("Delete category with id= {}, SERVICE", categoryId);
     }
 
     @Override
