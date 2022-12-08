@@ -1,13 +1,12 @@
 package ru.practicum.comment.model;
 
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
 import ru.practicum.event.model.Event;
 import ru.practicum.user.model.User;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -20,6 +19,7 @@ public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "comment_id", nullable = false)
     Integer id;
 
     @ManyToOne
@@ -34,7 +34,6 @@ public class Comment {
     @Column(name = "text", nullable = false)
     String text;
 
-    @CreationTimestamp
     @Column(name = "created")
-    Instant created;
+    LocalDateTime created;
 }

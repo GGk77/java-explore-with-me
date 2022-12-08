@@ -51,8 +51,8 @@ public class PrivateCommentController {
 
     @GetMapping
     public List<CommentDto> getAllCommentsInEvent(@RequestParam Integer eventId,
-                                                 @RequestParam(defaultValue = "0") Integer from,
-                                                 @RequestParam(defaultValue = "10") Integer size) {
+                                                  @RequestParam(defaultValue = "0") Integer from,
+                                                  @RequestParam(defaultValue = "10") Integer size) {
         log.info("GET /users/{userId}/comments/{eventId}/ || eventId= {}", eventId);
         return commentService.getAllCommentsInEvent(eventId, from, size);
     }

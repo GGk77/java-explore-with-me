@@ -7,8 +7,6 @@ import java.util.List;
 public interface CommentService {
     void adminDelete(Integer comId);
 
-    List<CommentDto> getPublicCommentsByEventId(Integer userId);
-
     CommentDto create(Integer userId, Integer eventId, CommentDto commentDto);
 
     CommentDto update(Integer userId, Integer comId, CommentDto commentDto);

@@ -9,8 +9,7 @@ import java.util.List;
 
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Integer> {
-    List<Comment> getByEventIdOrderByTextDesc(Integer id);
+    List<Comment> getByEventIdOrderByCreatedDesc(Integer id, Pageable pageable);
 
-    List<Comment> getByEventId_OrderByTextDesc(Integer id, Pageable pageable);
-
+    List<Comment> getUserCommentOrderByUserId(Integer userId);
 }

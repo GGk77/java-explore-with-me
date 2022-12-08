@@ -6,7 +6,7 @@ import ru.practicum.comment.model.Comment;
 import ru.practicum.event.model.Event;
 import ru.practicum.user.model.User;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Component
 public class CommentMapper {
@@ -16,7 +16,7 @@ public class CommentMapper {
                 .user(user)
                 .event(event)
                 .text(commentDto.getText())
-                .created(Instant.now())
+                .created(LocalDateTime.now())
                 .build();
     }
 

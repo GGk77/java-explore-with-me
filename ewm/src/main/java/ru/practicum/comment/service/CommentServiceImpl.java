@@ -42,14 +42,6 @@ public class CommentServiceImpl implements CommentService {
         log.debug("Delete comment with id= {}, SERVICE", comId);
     }
 
-    @Override
-    public List<CommentDto> getPublicCommentsByEventId(Integer eventId) {
-        List<Comment> commentList = commentRepository.getByEventIdOrderByTextDesc(eventId);
-        return commentList.stream()
-                .map(CommentMapper::toCommentDto)
-                .collect(Collectors.toList());
-    }
-
     @Transactional
     public CommentDto create(Integer userId, Integer eventId, CommentDto commentDto) {
         log.debug("Create comment, SERVICE");
@@ -61,14 +53,15 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Transactional
-    public CommentDto update(Integer userId, Integer comId, CommentDto commentDto) {
+    public CommentDto update(Integer userId, Integer comId, CommentDto updateText) {
         log.debug("Update comment, SERVICE");
         User user = userService.getEntityById(userId);
         Comment comment = getEntityById(comId);
-        if (!commentDto.getUserId().equals(user.getId())) {
+        CommentDto dto = CommentMapper.toCommentDto(comment);
+        if (!dto.getUserId().equals(user.getId())) {
             throw new BadRequestException("comment must belong to the user");
         }
-        comment.setText(commentDto.getText());
+        comment.setText(updateText.getText());
         log.debug("Comment with id= {}, updated", comment.getId());
         return CommentMapper.toCommentDto(commentRepository.save(comment));
     }
@@ -76,11 +69,14 @@ public class CommentServiceImpl implements CommentService {
     @Transactional
     public void deleteCommentById(Integer userId, Integer comId) {
         log.debug("Delete comment with id= {}, SERVICE", comId);
-        User user = userService.getEntityById(userId);
-        if (!user.getId().equals(userId)) {
-            throw new BadRequestException("comment must belong to the user");
+        List<Comment> commentList = commentRepository.getUserCommentOrderByUserId(userId);
+        for (Comment comment : commentList) {
+            if (!comment.getId().equals(comId)) {
+                throw new BadRequestException("comment must belong to the user");
+            } else {
+                commentRepository.deleteById(comId);
+            }
         }
-        commentRepository.deleteById(comId);
     }
 
     @Override
@@ -93,7 +89,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<CommentDto> getAllCommentsInEvent(Integer eventId, Integer from, Integer size) {
         Pageable pageable = PageRequest.of(from / size, size);
-        List<Comment> commentList = commentRepository.getByEventId_OrderByTextDesc(eventId, pageable);
+        List<Comment> commentList = commentRepository.getByEventIdOrderByCreatedDesc(eventId, pageable);
         return commentList.stream()
                 .map(CommentMapper::toCommentDto)
                 .collect(Collectors.toList());
